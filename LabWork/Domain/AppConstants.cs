@@ -14,7 +14,7 @@
         // Place parameters
         public static uint PlaceWidth = 30;
         public static uint PlaceHeight = 30;
-        public static uint PlaceThickness = 3;
+        public static uint PlaceThickness = 4;
         public static Color PlaceColor = Color.Black;
 
         // Transition parameters
@@ -28,7 +28,7 @@
         public static Color TokenColor = Color.Black;
 
         // Line parameters
-        public static uint LineThickness = 3;
+        public static uint LineThickness = 2;
         public static Color LineColor = Color.Black;
     }
 }
