@@ -83,6 +83,7 @@
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpOutput.ForeColor = Color.Black;
             tlpOutput.Location = new Point(3, 544);
             tlpOutput.Name = "tlpOutput";
             tlpOutput.RowCount = 2;
