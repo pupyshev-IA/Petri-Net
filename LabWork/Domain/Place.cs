@@ -9,5 +9,7 @@
         public FigureParameters Parameters { get; set; }
 
         public IEnumerable<Token> Tokens { get; set; } = new List<Token>();
+
+        public Dictionary<int, Transition> Connections { get; set; } = new Dictionary<int, Transition>();
     }
 }

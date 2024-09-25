@@ -7,5 +7,7 @@
         public Position Сoordinates { get; set; }
 
         public FigureParameters Parameters { get; set; }
+
+        public Dictionary<int, Place> Connections { get; set; } = new Dictionary<int, Place>();
     }
 }
