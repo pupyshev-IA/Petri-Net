@@ -1,4 +1,4 @@
-﻿namespace LabWork.Domain
+﻿namespace LabWork.Domain.GraphElements
 {
     public class Transition
     {
