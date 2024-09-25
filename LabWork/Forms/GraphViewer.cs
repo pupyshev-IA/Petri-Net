@@ -2,11 +2,14 @@ namespace LabWork
 {
     public partial class GraphViewer : Form
     {
-        private IEnumerable<int> _currentTokens;
+        private string _currentStageText = "Этап: {0}";
+        private int _currentStage = 0;
 
         public GraphViewer()
         {
             InitializeComponent();
+
+            SetLabelStageText();
         }
 
         /*_________________________________________________________________________________________*/
@@ -43,5 +46,8 @@ namespace LabWork
         {
 
         }
+
+        private void SetLabelStageText() => 
+            labelStage.Text = string.Format(_currentStageText, _currentStage);
     }
 }

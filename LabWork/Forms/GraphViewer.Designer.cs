@@ -32,6 +32,7 @@
             panelMain = new Panel();
             panelOuterSettingsHolder = new Panel();
             panelSettingsHolder = new Panel();
+            labelStage = new Label();
             maskedTextBox1 = new MaskedTextBox();
             btnForward = new Button();
             btnBack = new Button();
@@ -73,6 +74,7 @@
             // panelSettingsHolder
             // 
             panelSettingsHolder.BackColor = Color.WhiteSmoke;
+            panelSettingsHolder.Controls.Add(labelStage);
             panelSettingsHolder.Controls.Add(maskedTextBox1);
             panelSettingsHolder.Controls.Add(btnForward);
             panelSettingsHolder.Controls.Add(btnBack);
@@ -83,6 +85,15 @@
             panelSettingsHolder.Padding = new Padding(15, 10, 15, 10);
             panelSettingsHolder.Size = new Size(225, 415);
             panelSettingsHolder.TabIndex = 0;
+            // 
+            // labelStage
+            // 
+            labelStage.Location = new Point(59, 372);
+            labelStage.Name = "labelStage";
+            labelStage.Size = new Size(107, 30);
+            labelStage.TabIndex = 6;
+            labelStage.Text = "label";
+            labelStage.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // maskedTextBox1
             // 
@@ -101,24 +112,24 @@
             btnForward.BackColor = Color.White;
             btnForward.Cursor = Cursors.Hand;
             btnForward.Image = (Image)resources.GetObject("btnForward.Image");
-            btnForward.Location = new Point(132, 377);
+            btnForward.Location = new Point(172, 377);
             btnForward.Name = "btnForward";
             btnForward.Size = new Size(35, 25);
             btnForward.TabIndex = 3;
             btnForward.UseVisualStyleBackColor = false;
-            btnForward.Click += this.btnForward_Click;
+            btnForward.Click += btnForward_Click;
             // 
             // btnBack
             // 
             btnBack.BackColor = Color.White;
             btnBack.Cursor = Cursors.Hand;
             btnBack.Image = (Image)resources.GetObject("btnBack.Image");
-            btnBack.Location = new Point(65, 377);
+            btnBack.Location = new Point(18, 377);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(35, 25);
             btnBack.TabIndex = 2;
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += this.btnBack_Click;
+            btnBack.Click += btnBack_Click;
             // 
             // labelInput
             // 
@@ -176,7 +187,7 @@
             panelOuterMain.Size = new Size(900, 600);
             panelOuterMain.TabIndex = 1;
             // 
-            // Main
+            // GraphViewer
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -186,7 +197,7 @@
             Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(5);
-            Name = "Main";
+            Name = "GraphViewer";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Main";
             panelMain.ResumeLayout(false);
@@ -211,5 +222,6 @@
         private MaskedTextBox maskedTextBox1;
         private Panel panelOuterSettingsHolder;
         private Panel panelSettingsHolder;
+        private Label labelStage;
     }
 }
