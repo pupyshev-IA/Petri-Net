@@ -12,9 +12,9 @@
 
 
         // Place parameters
-        public const uint PlaceWidth = 30;
-        public const uint PlaceHeight = 30;
-        public const uint PlaceThickness = 4;
+        public const uint PlaceWidth = 50;
+        public const uint PlaceHeight = 50;
+        public const uint PlaceThickness = 3;
         public static Color PlaceColor = Color.Black;
 
         // Transition parameters

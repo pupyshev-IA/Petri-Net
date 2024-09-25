@@ -2,9 +2,8 @@
 {
     public struct FigureParameters
     {
-        public uint Width;
-        public uint Height;
-        public uint Thickness;
-        public Color Color;
+        public Size ShapeMetrics { get; set; }
+        public Color BrushColor { get; set; }
+        public uint Thickness { get; set; }
     }
 }

@@ -1,14 +1,18 @@
 using LabWork.Domain;
 using LabWork.Service;
+using System.Windows.Forms;
 
 namespace LabWork
 {
     public partial class GraphViewer : Form
     {
-        private const string SplitSeparator = ";  ";
+        private const string InputSeparator = ";  ";
         private const string WhiteSpace = "   ";
+
         private string _currentStageText = "Этап: {0}";
         private int _currentStage = 1;
+
+        private ICollection<int> _currentTokenSequence;
 
         public GraphViewer()
         {
@@ -40,6 +44,11 @@ namespace LabWork
         }
         /*_________________________________________________________________________________________*/
 
+        private void panelView_Paint(object sender, PaintEventArgs e)
+        {
+            GraphBuilder.BuildPetriGraph(e, panelView, _currentTokenSequence.ToList());
+        }
+
         private void btnCreateGraph_Click(object sender, EventArgs e)
         {
             if (!ValidateInputData())
@@ -48,27 +57,23 @@ namespace LabWork
                 return;
             }
 
-            GraphBuilder.BuildGraph();
+            _currentTokenSequence = InitializeTokenSequence();
+            _currentStage = 1;
             UpdateButtonsStatus();
+
+            panelView.Paint += panelView_Paint;
+            panelView.Invalidate();
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (_currentStage <= 1)
-                return;
-
             _currentStage--;
             SetValueForStageLabel();
             UpdateButtonsStatus();
-
-            tlpOutput.Controls.Add(new Button());
         }
 
         private void btnForward_Click(object sender, EventArgs e)
         {
-            if (_currentStage > AppConstants.NumberOfFirings)
-                return;
-
             _currentStage++;
             SetValueForStageLabel();
             UpdateButtonsStatus();
@@ -96,7 +101,7 @@ namespace LabWork
 
         private bool ValidateInputData()
         {
-            var tokenCountSequence = mTextBoxInputData.Text.Split(SplitSeparator);
+            var tokenCountSequence = mTextBoxInputData.Text.Split(InputSeparator);
             foreach (var tokenCount in tokenCountSequence)
             {
                 if (string.IsNullOrWhiteSpace(tokenCount) || int.Parse(tokenCount) > AppConstants.TokensMaxCount)
@@ -105,6 +110,11 @@ namespace LabWork
 
             return true;
         }
+
+        private ICollection<int> InitializeTokenSequence() =>
+            mTextBoxInputData.Text.Split(InputSeparator)
+            .Select(int.Parse)
+            .ToList();
 
         private void CreateErrorMessage(string title, string message) =>
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
