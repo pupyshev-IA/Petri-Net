@@ -9,11 +9,11 @@ namespace LabWork.Service
         public GraphInfo BuildPetriGraph(ScrollableControl layout, List<int> tokenSequence)
         {
             var graphInfo = new GraphInfo();
-            var matrix = CreateMatrixFromRegion(layout);
+            var availabilityMatrix = CreateAvailabilityMatrix(layout);
 
             foreach (var index in Enumerable.Range(1, AppConstants.PlacesMaxCount))
             {
-                var place = CreatePlaceElement(matrix, index, tokenSequence[index - 1]);
+                var place = CreatePlaceElement(availabilityMatrix, index, tokenSequence[index - 1]);
                 graphInfo.PlacesInfo.Add(place.Id, place);
             }
 
@@ -36,12 +36,12 @@ namespace LabWork.Service
             }
         }
 
-        private Place CreatePlaceElement(Array matrix, int id, int tokenCount)
+        private Place CreatePlaceElement(Array availabilityMatrix, int id, int tokenCount)
         {
             var place = new Place
             {
                 Id = id,
-                Сoordinates = GetRandomPositionInMatrix(matrix),
+                Сoordinates = GetRandomPositionInMatrix(availabilityMatrix),
                 Parameters = new FigureParameters
                 {
                     ShapeMetrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight),
@@ -53,26 +53,27 @@ namespace LabWork.Service
             return place;
         }
 
-        private Array CreateMatrixFromRegion(ScrollableControl layout)
+        private Array CreateAvailabilityMatrix(ScrollableControl layout)
         {
             var columnCount = (int)Math.Floor((double)layout.Width / AppConstants.PlaceWidth);
             var rowCount = (int)Math.Floor((double)layout.Height / AppConstants.PlaceHeight);
-            
-            GraphElement[,] matrix = new GraphElement[rowCount, columnCount];
-            
-            return matrix;
+
+            bool[,] availabilityMatrix = new bool[rowCount, columnCount];
+
+            return availabilityMatrix;
         }
 
-        private Point GetRandomPositionInMatrix(Array matrix)
+        private Point GetRandomPositionInMatrix(Array availabilityMatrix)
         {
             Random random = new Random();
+            int rowIndex = random.Next(0, availabilityMatrix.GetLength(0));
+            int columnIndex = random.Next(0, availabilityMatrix.GetLength(1));
 
-            int rowIndex = random.Next(0, matrix.GetLength(0));
-            int columnIndex = random.Next(0, matrix.GetLength(1));
-            
-            return matrix.GetValue(rowIndex, columnIndex) is null
-                ? ConvertIndexPositionToPoint(rowIndex, columnIndex)
-                : GetRandomPositionInMatrix(matrix);
+            if (availabilityMatrix.GetValue(rowIndex, columnIndex) is true)
+                return GetRandomPositionInMatrix(availabilityMatrix);
+
+            availabilityMatrix.SetValue(true, rowIndex, columnIndex);
+            return ConvertIndexPositionToPoint(rowIndex, columnIndex);
         }
 
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>
