@@ -56,7 +56,7 @@ namespace LabWork.Service
         private Array CreateMatrixFromRegion(ScrollableControl layout)
         {
             var columnCount = (int)Math.Floor((double)layout.Width / AppConstants.PlaceWidth);
-            var rowCount = (int)Math.Floor((double)layout.Height / AppConstants.PlaceWidth);
+            var rowCount = (int)Math.Floor((double)layout.Height / AppConstants.PlaceHeight);
             
             GraphElement[,] matrix = new GraphElement[rowCount, columnCount];
             
@@ -76,6 +76,6 @@ namespace LabWork.Service
         }
 
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>
-            new Point((int)((rowIndex - 1) * AppConstants.PlaceWidth), (int)((columnIndex - 1) * AppConstants.PlaceHeight));
+            new Point((int)((columnIndex - 1) * AppConstants.PlaceHeight), (int)((rowIndex - 1) * AppConstants.PlaceWidth));
     }
 }
