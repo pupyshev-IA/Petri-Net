@@ -2,6 +2,6 @@
 {
     public class Transition : GraphElement
     {
-        public Dictionary<int, Place> Connections { get; set; } = new Dictionary<int, Place>();
+        public IDictionary<int, Place> Connections { get; set; } = new Dictionary<int, Place>();
     }
 }
