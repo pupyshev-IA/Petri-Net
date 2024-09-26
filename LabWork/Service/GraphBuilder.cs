@@ -67,8 +67,8 @@ namespace LabWork.Service
         {
             Random random = new Random();
 
-            int rowIndex = random.Next(1, matrix.GetLength(0));
-            int columnIndex = random.Next(1, matrix.GetLength(1));
+            int rowIndex = random.Next(0, matrix.GetLength(0));
+            int columnIndex = random.Next(0, matrix.GetLength(1));
             
             return matrix.GetValue(rowIndex, columnIndex) is null
                 ? ConvertIndexPositionToPoint(rowIndex, columnIndex)
@@ -76,6 +76,6 @@ namespace LabWork.Service
         }
 
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>
-            new Point((int)((columnIndex - 1) * AppConstants.PlaceHeight), (int)((rowIndex - 1) * AppConstants.PlaceWidth));
+            new Point((int)((columnIndex) * AppConstants.PlaceHeight), (int)((rowIndex) * AppConstants.PlaceWidth));
     }
 }
