@@ -1,3 +1,5 @@
+using LabWork.Service;
+
 namespace LabWork
 {
     internal static class Program
@@ -9,7 +11,7 @@ namespace LabWork
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new GraphViewer());
+            Application.Run(new GraphViewer(new GraphBuilder()));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using LabWork.Domain;
-using LabWork.Domain.GraphElements;
 
 namespace LabWork.Abstractions
 {

@@ -72,7 +72,7 @@
             panelMain.Dock = DockStyle.Fill;
             panelMain.Location = new Point(2, 2);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(896, 616);
+            panelMain.Size = new Size(898, 618);
             panelMain.TabIndex = 0;
             panelMain.MouseDown += panelMain_MouseDown;
             // 
@@ -84,7 +84,7 @@
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ForeColor = Color.Black;
-            tlpOutput.Location = new Point(3, 544);
+            tlpOutput.Location = new Point(5, 546);
             tlpOutput.Name = "tlpOutput";
             tlpOutput.RowCount = 2;
             tlpOutput.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -95,10 +95,10 @@
             // lblOutput
             // 
             lblOutput.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblOutput.Location = new Point(357, 506);
+            lblOutput.Location = new Point(350, 508);
             lblOutput.Margin = new Padding(350, 0, 350, 0);
             lblOutput.Name = "lblOutput";
-            lblOutput.Size = new Size(182, 35);
+            lblOutput.Size = new Size(191, 35);
             lblOutput.TabIndex = 5;
             lblOutput.Text = "Результат:";
             lblOutput.TextAlign = ContentAlignment.MiddleCenter;
@@ -107,7 +107,7 @@
             // 
             panelOuterSettingsHolder.BackColor = Color.FromArgb(120, 120, 120);
             panelOuterSettingsHolder.Controls.Add(panelSettingsHolder);
-            panelOuterSettingsHolder.Location = new Point(659, 85);
+            panelOuterSettingsHolder.Location = new Point(661, 87);
             panelOuterSettingsHolder.Name = "panelOuterSettingsHolder";
             panelOuterSettingsHolder.Padding = new Padding(1);
             panelOuterSettingsHolder.Size = new Size(227, 417);
@@ -318,7 +318,7 @@
             panelOuterView.Location = new Point(3, 3);
             panelOuterView.Name = "panelOuterView";
             panelOuterView.Padding = new Padding(1);
-            panelOuterView.Size = new Size(650, 500);
+            panelOuterView.Size = new Size(652, 502);
             panelOuterView.TabIndex = 1;
             // 
             // panelView
@@ -327,8 +327,9 @@
             panelView.Dock = DockStyle.Fill;
             panelView.Location = new Point(1, 1);
             panelView.Name = "panelView";
-            panelView.Size = new Size(648, 498);
+            panelView.Size = new Size(650, 500);
             panelView.TabIndex = 1;
+            panelView.Paint += panelView_Paint;
             // 
             // btnClose
             // 
@@ -337,7 +338,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold);
             btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(851, 10);
+            btnClose.Location = new Point(853, 10);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(35, 35);
             btnClose.TabIndex = 0;
@@ -353,7 +354,7 @@
             panelOuterMain.Location = new Point(0, 0);
             panelOuterMain.Name = "panelOuterMain";
             panelOuterMain.Padding = new Padding(2);
-            panelOuterMain.Size = new Size(900, 620);
+            panelOuterMain.Size = new Size(902, 622);
             panelOuterMain.TabIndex = 1;
             // 
             // GraphViewer
@@ -361,7 +362,7 @@
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(900, 620);
+            ClientSize = new Size(902, 622);
             Controls.Add(panelOuterMain);
             Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FormBorderStyle = FormBorderStyle.None;

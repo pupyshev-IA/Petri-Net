@@ -1,6 +1,5 @@
+using LabWork.Abstractions;
 using LabWork.Domain;
-using LabWork.Service;
-using System.Windows.Forms;
 
 namespace LabWork
 {
@@ -12,12 +11,17 @@ namespace LabWork
         private string _currentStageText = "Этап: {0}";
         private int _currentStage = 1;
 
-        private ICollection<int> _currentTokenSequence;
+        private IGraphBuilder _graphBuilder;
+        private ICollection<int>? _currentTokenSequence;
+        private GraphInfo? _graphInfo;
 
-        public GraphViewer()
+        public GraphViewer(IGraphBuilder graphBuilder)
         {
             InitializeComponent();
 
+            _graphBuilder = graphBuilder;
+
+            panelView.Visible = false; // Prevents the panel from redrawing when the form is first launched
             SetValuesForInfoLabels();
             SetValueForStageLabel();
         }
@@ -46,7 +50,10 @@ namespace LabWork
 
         private void panelView_Paint(object sender, PaintEventArgs e)
         {
-            GraphBuilder.BuildPetriGraph(e, panelView, _currentTokenSequence.ToList());
+            _graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
+
+            Graphics graphics = e.Graphics;
+            _graphBuilder.VisualizePetriGraph(_graphInfo, panelView, graphics);
         }
 
         private void btnCreateGraph_Click(object sender, EventArgs e)
@@ -59,9 +66,10 @@ namespace LabWork
 
             _currentTokenSequence = InitializeTokenSequence();
             _currentStage = 1;
+            SetValueForStageLabel();
             UpdateButtonsStatus();
 
-            panelView.Paint += panelView_Paint;
+            panelView.Visible = true;
             panelView.Invalidate();
         }
 
