@@ -1,11 +1,7 @@
 ﻿namespace LabWork.Domain.GraphElements
 {
-    public class Token
+    public class Token : GraphElement
     {
-        public required int Id { get; set; }
 
-        public Point Сoordinates { get; set; }
-
-        public FigureParameters Parameters { get; set; }
     }
 }
