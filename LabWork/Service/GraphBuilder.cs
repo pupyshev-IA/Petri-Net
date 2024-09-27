@@ -8,14 +8,26 @@ namespace LabWork.Service
     {
         public GraphInfo BuildPetriGraph(ScrollableControl layout, List<int> tokenSequence)
         {
+            int tokenId = 1;
             var graphInfo = new GraphInfo();
             var occupancyMatrix = CreateOccupancyMatrix(layout);
 
             foreach (var index in Enumerable.Range(1, AppConstants.PlacesMaxCount))
             {
                 var coordinates = GetRandomPositionInMatrix(occupancyMatrix);
-                var place = CreatePlaceElement(index, coordinates, tokenSequence[index - 1]);
+                var place = CreatePlaceElement(index, coordinates);
                 graphInfo.PlacesInfo.Add(place.Id, place);
+            }
+            foreach (var place in graphInfo.PlacesInfo.Values)
+            {
+                var tokenCount = tokenSequence[place.Id - 1];
+                var tokens = CreateTokensForPlace(place, tokenCount, ref tokenId);
+
+                foreach (var token in tokens)
+                {
+                    place.Tokens.Add(token);
+                    graphInfo.TokensInfo.Add(token.Id, token);
+                }
             }
 
             return graphInfo;
@@ -25,17 +37,21 @@ namespace LabWork.Service
         {
             DrawCells(layout, graphics);
 
-            Pen penPlace = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
-
+            Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
             Font font = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
-            SolidBrush brush = new SolidBrush(AppConstants.TextColor);
-
+            SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
-                graphics.DrawEllipse(penPlace, new Rectangle(place.Сoordinates, place.ShapeMetrics));
+                graphics.DrawEllipse(placePen, new Rectangle(place.Сoordinates, place.ShapeMetrics));
 
                 Point markerPosition = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
-                graphics.DrawString(place.Id.ToString(), font, brush, markerPosition);
+                graphics.DrawString(place.Id.ToString(), font, textBrush, markerPosition);
+            }
+
+            SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
+            foreach (var token in graphInfo.TokensInfo.Values)
+            {
+                graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.ShapeMetrics));
             }
         }
 
@@ -50,7 +66,44 @@ namespace LabWork.Service
                 graphics.DrawLine(pen, 0, y, layout.Width, y);
         }
 
-        private Place CreatePlaceElement(int id, Point coordinates, int tokenCount)
+        private ICollection<Token> CreateTokensForPlace(Place place, int tokenCount, ref int tokenId)
+        {
+            var tokens = new List<Token>();
+
+            if (tokenCount == 1)
+            {
+                int tokenX = (int)(place.Сoordinates.X + (place.ShapeMetrics.Width - AppConstants.TokenWidth) / 2);
+                int tokenY = (int)(place.Сoordinates.Y + (place.ShapeMetrics.Height - AppConstants.TokenHeight) / 2);
+                var coordinates = new Point(tokenX, tokenY);
+
+                var token = CreateTokenElement(tokenId++, coordinates);
+                tokens.Add(token);
+
+                return tokens;
+            }
+            else
+            {
+                double angleStep = 360.0 / tokenCount;
+                double angle = 0;
+
+                for (int i = 0; i < tokenCount; i++)
+                {
+                    double radian = angle * (Math.PI / 180);
+                    int smallCircleX = place.Сoordinates.X + (int)((place.ShapeMetrics.Width / 2.5) * Math.Cos(radian)) + (place.ShapeMetrics.Width / 2 - (int)AppConstants.TokenWidth / 2);
+                    int smallCircleY = place.Сoordinates.Y + (int)((place.ShapeMetrics.Height / 2.5) * Math.Sin(radian)) + (place.ShapeMetrics.Height / 2 - (int)AppConstants.TokenHeight / 2);
+
+                    var coordinates = new Point(smallCircleX, smallCircleY);
+                    var token = CreateTokenElement(tokenId++, coordinates);
+                    tokens.Add(token);
+
+                    angle += angleStep;
+                }
+
+                return tokens;
+            }
+        }
+
+        private Place CreatePlaceElement(int id, Point coordinates)
         {
             var place = new Place
             {
@@ -60,6 +113,18 @@ namespace LabWork.Service
             };
 
             return place;
+        }
+
+        private Token CreateTokenElement(int id, Point coordinates)
+        {
+            var token = new Token
+            {
+                Id = id,
+                Сoordinates = coordinates,
+                ShapeMetrics = new Size((int)AppConstants.TokenWidth, (int)AppConstants.TokenHeight)
+            };
+
+            return token;
         }
 
         private Array CreateOccupancyMatrix(ScrollableControl layout)

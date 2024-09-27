@@ -98,7 +98,7 @@ namespace LabWork
             lblNumberOfFirings.Text = lblNumberOfFirings.Text + WhiteSpace + AppConstants.NumberOfFirings;
             lblPlacesMaxCount.Text = lblPlacesMaxCount.Text + WhiteSpace + AppConstants.PlacesMaxCount;
             lblTransitionsMaxCount.Text = lblTransitionsMaxCount.Text + WhiteSpace + AppConstants.TransitionsMaxCount;
-            lblTokensMaxCount.Text = lblTokensMaxCount.Text + WhiteSpace + AppConstants.TokensMaxCount;
+            lblTokensMaxCount.Text = lblTokensMaxCount.Text + WhiteSpace + AppConstants.TokensMaxCountPerPlace;
         }
 
         private void UpdateButtonsStatus()
@@ -112,7 +112,7 @@ namespace LabWork
             var tokenCountSequence = mTextBoxInputData.Text.Split(InputSeparator);
             foreach (var tokenCount in tokenCountSequence)
             {
-                if (string.IsNullOrWhiteSpace(tokenCount) || int.Parse(tokenCount) > AppConstants.TokensMaxCount)
+                if (string.IsNullOrWhiteSpace(tokenCount) || int.Parse(tokenCount) > AppConstants.TokensMaxCountPerPlace)
                     return false;
             }
 
