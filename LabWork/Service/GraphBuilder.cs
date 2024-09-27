@@ -22,18 +22,29 @@ namespace LabWork.Service
 
         public void VisualizePetriGraph(GraphInfo graphInfo, ScrollableControl layout, Graphics graphics)
         {
-            Pen penLine = new Pen(Color.Gray, 1);
-            for (int x = 0; x <= layout.Width; x += (int)AppConstants.PlaceWidth)
-                graphics.DrawLine(penLine, x, 0, x, layout.Height);
-            for (int y = 0; y <= layout.Height; y += (int)AppConstants.PlaceHeight)
-                graphics.DrawLine(penLine, 0, y, layout.Width, y);
-
+            DrawCells(layout, graphics);
 
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
                 Pen penPlace = new Pen(place.Parameters.BrushColor, place.Parameters.Thickness);
                 graphics.DrawEllipse(penPlace, new Rectangle(place.Сoordinates, place.Parameters.ShapeMetrics));
+
+                Font font = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
+                SolidBrush brush = new SolidBrush(AppConstants.TextColor);
+                Point position = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
+                graphics.DrawString($"{place.Id}", font, brush, position);
             }
+        }
+
+        private void DrawCells(ScrollableControl layout, Graphics graphics)
+        {
+            Pen pen = new Pen(AppConstants.CellColor, AppConstants.CellThickness);
+
+            for (int x = 0; x <= layout.Width; x += (int)AppConstants.PlaceWidth)
+                graphics.DrawLine(pen, x, 0, x, layout.Height);
+
+            for (int y = 0; y <= layout.Height; y += (int)AppConstants.PlaceHeight)
+                graphics.DrawLine(pen, 0, y, layout.Width, y);
         }
 
         private Place CreatePlaceElement(Array occupancyMatrix, int id, int tokenCount)
@@ -55,10 +66,10 @@ namespace LabWork.Service
 
         private Array CreateOccupancyMatrix(ScrollableControl layout)
         {
-            var columnCount = (int)Math.Floor((double)layout.Width / AppConstants.PlaceWidth);
+            var colCount = (int)Math.Floor((double)layout.Width / AppConstants.PlaceWidth);
             var rowCount = (int)Math.Floor((double)layout.Height / AppConstants.PlaceHeight);
 
-            bool[,] occupancyMatrix = new bool[rowCount, columnCount];
+            bool[,] occupancyMatrix = new bool[rowCount, colCount];
 
             return occupancyMatrix;
         }
@@ -67,13 +78,42 @@ namespace LabWork.Service
         {
             Random random = new Random();
             int rowIndex = random.Next(0, occupancyMatrix.GetLength(0));
-            int columnIndex = random.Next(0, occupancyMatrix.GetLength(1));
+            int colIndex = random.Next(0, occupancyMatrix.GetLength(1));
 
-            if (occupancyMatrix.GetValue(rowIndex, columnIndex) is true)
+            if (occupancyMatrix.GetValue(rowIndex, colIndex) is true)
                 return GetRandomPositionInMatrix(occupancyMatrix);
 
-            occupancyMatrix.SetValue(true, rowIndex, columnIndex);
-            return ConvertIndexPositionToPoint(rowIndex, columnIndex);
+            if (AreNeighborCellsFree(occupancyMatrix, rowIndex, colIndex) is false)
+                return GetRandomPositionInMatrix(occupancyMatrix);
+
+            occupancyMatrix.SetValue(true, rowIndex, colIndex);
+            return ConvertIndexPositionToPoint(rowIndex, colIndex);
+        }
+
+        private bool AreNeighborCellsFree(Array occupancyMatrix, int rowIndex, int colIndex)
+        {
+            int rowsCount = occupancyMatrix.GetLength(0);
+            int colsCount = occupancyMatrix.GetLength(1);
+
+            for (int i = -(int)AppConstants.CellGap; i <= (int)AppConstants.CellGap; i++)
+            {
+                for (int j = -(int)AppConstants.CellGap; j <= (int)AppConstants.CellGap; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+
+                    int neighborRow = rowIndex + i;
+                    int neighborCol = colIndex + j;
+
+                    if (neighborRow >= 0 && neighborRow < rowsCount && neighborCol >= 0 && neighborCol < colsCount)
+                    {
+                        if (occupancyMatrix.GetValue(neighborRow, neighborCol) is true)
+                            return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>
