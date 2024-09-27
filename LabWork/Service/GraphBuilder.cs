@@ -37,10 +37,11 @@ namespace LabWork.Service
         {
             DrawCells(layout, graphics);
 
-            Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
             Font textFont = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
             SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
+            Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
             SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
+            SolidBrush transitionBrush = new SolidBrush(AppConstants.TransitionColor);
 
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
@@ -51,9 +52,10 @@ namespace LabWork.Service
             }
 
             foreach (var token in graphInfo.TokensInfo.Values)
-            {
                 graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
-            }
+
+            foreach (var transition in graphInfo.TransitionsInfo.Values)
+                graphics.FillRectangle(transitionBrush, new Rectangle(transition.Сoordinates, transition.Metrics));
         }
 
         private void DrawCells(ScrollableControl layout, Graphics graphics)
