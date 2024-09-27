@@ -6,6 +6,6 @@
 
         public required Point Сoordinates { get; set; }
 
-        public required Size ShapeMetrics { get; set; }
+        public required Size Metrics { get; set; }
     }
 }

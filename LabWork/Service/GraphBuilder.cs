@@ -42,7 +42,7 @@ namespace LabWork.Service
             SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
-                graphics.DrawEllipse(placePen, new Rectangle(place.Сoordinates, place.ShapeMetrics));
+                graphics.DrawEllipse(placePen, new Rectangle(place.Сoordinates, place.Metrics));
 
                 Point markerPosition = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
                 graphics.DrawString(place.Id.ToString(), font, textBrush, markerPosition);
@@ -51,7 +51,7 @@ namespace LabWork.Service
             SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
             foreach (var token in graphInfo.TokensInfo.Values)
             {
-                graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.ShapeMetrics));
+                graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
             }
         }
 
@@ -70,10 +70,13 @@ namespace LabWork.Service
         {
             var tokens = new List<Token>();
 
+            int parentCenterX = place.Сoordinates.X + place.Metrics.Width / 2;
+            int parentCenterY = place.Сoordinates.Y + place.Metrics.Height / 2;
+
             if (tokenCount == 1)
             {
-                int tokenX = (int)(place.Сoordinates.X + (place.ShapeMetrics.Width - AppConstants.TokenWidth) / 2);
-                int tokenY = (int)(place.Сoordinates.Y + (place.ShapeMetrics.Height - AppConstants.TokenHeight) / 2);
+                int tokenX = (int)(parentCenterX - AppConstants.TokenWidth / 2);
+                int tokenY = (int)(parentCenterY - AppConstants.TokenHeight / 2);
                 var coordinates = new Point(tokenX, tokenY);
 
                 var token = CreateTokenElement(tokenId++, coordinates);
@@ -89,10 +92,12 @@ namespace LabWork.Service
                 for (int i = 0; i < tokenCount; i++)
                 {
                     double radian = angle * (Math.PI / 180);
-                    int smallCircleX = place.Сoordinates.X + (int)((place.ShapeMetrics.Width / 2.5) * Math.Cos(radian)) + (place.ShapeMetrics.Width / 2 - (int)AppConstants.TokenWidth / 2);
-                    int smallCircleY = place.Сoordinates.Y + (int)((place.ShapeMetrics.Height / 2.5) * Math.Sin(radian)) + (place.ShapeMetrics.Height / 2 - (int)AppConstants.TokenHeight / 2);
+                    int distanceFromCenter = (place.Metrics.Width - (int)AppConstants.TokenWidth) / 3;
 
-                    var coordinates = new Point(smallCircleX, smallCircleY);
+                    int x = parentCenterX + (int)(distanceFromCenter * Math.Cos(radian)) - (int)AppConstants.TokenWidth / 2;
+                    int y = parentCenterY + (int)(distanceFromCenter * Math.Sin(radian)) - (int)AppConstants.TokenHeight / 2;
+                    var coordinates = new Point(x, y);
+
                     var token = CreateTokenElement(tokenId++, coordinates);
                     tokens.Add(token);
 
@@ -109,7 +114,7 @@ namespace LabWork.Service
             {
                 Id = id,
                 Сoordinates = coordinates,
-                ShapeMetrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight)
+                Metrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight)
             };
 
             return place;
@@ -121,7 +126,7 @@ namespace LabWork.Service
             {
                 Id = id,
                 Сoordinates = coordinates,
-                ShapeMetrics = new Size((int)AppConstants.TokenWidth, (int)AppConstants.TokenHeight)
+                Metrics = new Size((int)AppConstants.TokenWidth, (int)AppConstants.TokenHeight)
             };
 
             return token;
