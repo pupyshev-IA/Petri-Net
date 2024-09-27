@@ -38,10 +38,8 @@ namespace LabWork.Service
             DrawCells(layout, graphics);
 
             Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
-
             Font textFont = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
             SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
-
             SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
 
             foreach (var place in graphInfo.PlacesInfo.Values)
@@ -51,6 +49,7 @@ namespace LabWork.Service
                 Point markerPosition = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
                 graphics.DrawString(place.Id.ToString(), textFont, textBrush, markerPosition);
             }
+
             foreach (var token in graphInfo.TokensInfo.Values)
             {
                 graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
