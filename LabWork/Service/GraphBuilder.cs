@@ -38,17 +38,19 @@ namespace LabWork.Service
             DrawCells(layout, graphics);
 
             Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
-            Font font = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
+
+            Font textFont = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
             SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
+
+            SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
+
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
                 graphics.DrawEllipse(placePen, new Rectangle(place.Сoordinates, place.Metrics));
 
                 Point markerPosition = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
-                graphics.DrawString(place.Id.ToString(), font, textBrush, markerPosition);
+                graphics.DrawString(place.Id.ToString(), textFont, textBrush, markerPosition);
             }
-
-            SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
             foreach (var token in graphInfo.TokensInfo.Values)
             {
                 graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
@@ -64,48 +66,6 @@ namespace LabWork.Service
 
             for (int y = 0; y <= layout.Height; y += (int)AppConstants.PlaceHeight)
                 graphics.DrawLine(pen, 0, y, layout.Width, y);
-        }
-
-        private ICollection<Token> CreateTokensForPlace(Place place, int tokenCount, ref int tokenId)
-        {
-            var tokens = new List<Token>();
-
-            int parentCenterX = place.Сoordinates.X + place.Metrics.Width / 2;
-            int parentCenterY = place.Сoordinates.Y + place.Metrics.Height / 2;
-
-            if (tokenCount == 1)
-            {
-                int tokenX = (int)(parentCenterX - AppConstants.TokenWidth / 2);
-                int tokenY = (int)(parentCenterY - AppConstants.TokenHeight / 2);
-                var coordinates = new Point(tokenX, tokenY);
-
-                var token = CreateTokenElement(tokenId++, coordinates);
-                tokens.Add(token);
-
-                return tokens;
-            }
-            else
-            {
-                double angleStep = 360.0 / tokenCount;
-                double angle = 0;
-
-                for (int i = 0; i < tokenCount; i++)
-                {
-                    double radian = angle * (Math.PI / 180);
-                    int distanceFromCenter = (place.Metrics.Width - (int)AppConstants.TokenWidth) / 3;
-
-                    int x = parentCenterX + (int)(distanceFromCenter * Math.Cos(radian)) - (int)AppConstants.TokenWidth / 2;
-                    int y = parentCenterY + (int)(distanceFromCenter * Math.Sin(radian)) - (int)AppConstants.TokenHeight / 2;
-                    var coordinates = new Point(x, y);
-
-                    var token = CreateTokenElement(tokenId++, coordinates);
-                    tokens.Add(token);
-
-                    angle += angleStep;
-                }
-
-                return tokens;
-            }
         }
 
         private Place CreatePlaceElement(int id, Point coordinates)
@@ -130,6 +90,46 @@ namespace LabWork.Service
             };
 
             return token;
+        }
+
+        private ICollection<Token> CreateTokensForPlace(Place place, int tokenCount, ref int tokenId)
+        {
+            var tokens = new List<Token>();
+
+            for (int tokenNum = 0; tokenNum < tokenCount; tokenNum++)
+            {
+                var coordinates = GetTokenPosition(place, tokenCount, tokenNum);
+                var token = CreateTokenElement(tokenId++, coordinates);
+                tokens.Add(token);
+            }
+
+            return tokens;
+        }
+
+        private Point GetTokenPosition(Place place, int tokenCount, int tokenNum)
+        {
+            int parentCenterX = place.Сoordinates.X + place.Metrics.Width / 2;
+            int parentCenterY = place.Сoordinates.Y + place.Metrics.Height / 2;
+
+            if (tokenCount == 1)
+            {
+                int tokenX = (int)(parentCenterX - AppConstants.TokenWidth / 2);
+                int tokenY = (int)(parentCenterY - AppConstants.TokenHeight / 2);
+
+                return new Point(tokenX, tokenY);
+            }
+
+            double angle = 0;
+            double angleStep = 360.0 / tokenCount;
+            angle = angleStep * tokenNum;
+
+            double radian = angle * (Math.PI / 180);
+            int distanceFromCenter = (place.Metrics.Width - (int)AppConstants.TokenWidth) / 3;
+
+            int x = parentCenterX + (int)(distanceFromCenter * Math.Cos(radian)) - (int)AppConstants.TokenWidth / 2;
+            int y = parentCenterY + (int)(distanceFromCenter * Math.Sin(radian)) - (int)AppConstants.TokenHeight / 2;
+
+            return new Point(x, y);
         }
 
         private Array CreateOccupancyMatrix(ScrollableControl layout)
