@@ -24,15 +24,17 @@ namespace LabWork.Service
         {
             DrawCells(layout, graphics);
 
+            Pen penPlace = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
+
+            Font font = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
+            SolidBrush brush = new SolidBrush(AppConstants.TextColor);
+
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
-                Pen penPlace = new Pen(place.Parameters.BrushColor, place.Parameters.Thickness);
-                graphics.DrawEllipse(penPlace, new Rectangle(place.Сoordinates, place.Parameters.ShapeMetrics));
+                graphics.DrawEllipse(penPlace, new Rectangle(place.Сoordinates, place.ShapeMetrics));
 
-                Font font = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
-                SolidBrush brush = new SolidBrush(AppConstants.TextColor);
-                Point position = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
-                graphics.DrawString($"{place.Id}", font, brush, position);
+                Point markerPosition = new Point(place.Сoordinates.X + 5, place.Сoordinates.Y + 5);
+                graphics.DrawString(place.Id.ToString(), font, brush, markerPosition);
             }
         }
 
@@ -53,12 +55,7 @@ namespace LabWork.Service
             {
                 Id = id,
                 Сoordinates = GetRandomPositionInMatrix(occupancyMatrix),
-                Parameters = new FigureParameters
-                {
-                    ShapeMetrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight),
-                    BrushColor = AppConstants.PlaceColor,
-                    Thickness = AppConstants.PlaceThickness,
-                }
+                ShapeMetrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight)
             };
 
             return place;
