@@ -14,7 +14,7 @@
         public const uint PlaceThickness = 3;
         public static Color PlaceColor = Color.Black;
         public const string TextFontFamily = "Arial";
-        public const uint TextSize = 16;
+        public const uint TextSize = 12;
         public static Color TextColor = Color.Black;
 
         // Transition parameters

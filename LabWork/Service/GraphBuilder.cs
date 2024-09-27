@@ -13,7 +13,8 @@ namespace LabWork.Service
 
             foreach (var index in Enumerable.Range(1, AppConstants.PlacesMaxCount))
             {
-                var place = CreatePlaceElement(occupancyMatrix, index, tokenSequence[index - 1]);
+                var coordinates = GetRandomPositionInMatrix(occupancyMatrix);
+                var place = CreatePlaceElement(index, coordinates, tokenSequence[index - 1]);
                 graphInfo.PlacesInfo.Add(place.Id, place);
             }
 
@@ -49,12 +50,12 @@ namespace LabWork.Service
                 graphics.DrawLine(pen, 0, y, layout.Width, y);
         }
 
-        private Place CreatePlaceElement(Array occupancyMatrix, int id, int tokenCount)
+        private Place CreatePlaceElement(int id, Point coordinates, int tokenCount)
         {
             var place = new Place
             {
                 Id = id,
-                Сoordinates = GetRandomPositionInMatrix(occupancyMatrix),
+                Сoordinates = coordinates,
                 ShapeMetrics = new Size((int)AppConstants.PlaceWidth, (int)AppConstants.PlaceHeight)
             };
 
