@@ -93,6 +93,18 @@ namespace LabWork.Service
             return token;
         }
 
+        private Transition CreateTransitionElement(int id, Point coordinates)
+        {
+            var transition = new Transition
+            {
+                Id = id,
+                Сoordinates = coordinates,
+                Metrics = new Size((int)AppConstants.TransitionWidth, (int)AppConstants.TransitionHeight)
+            };
+
+            return transition;
+        }
+
         private ICollection<Token> CreateTokensForPlace(Place place, int tokenCount, ref int tokenId)
         {
             var tokens = new List<Token>();
