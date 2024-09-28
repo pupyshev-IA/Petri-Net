@@ -21,7 +21,7 @@ namespace LabWork
 
             _graphBuilder = graphBuilder;
 
-            panelView.Visible = false; // Prevents the panel from redrawing when the form is first launched
+            panelView.Visible = false; // Prevents the panel from redrawing when the form is first launched.
             SetValuesForInfoLabels();
             SetValueForStageLabel();
         }

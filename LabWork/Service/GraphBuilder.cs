@@ -137,7 +137,7 @@ namespace LabWork.Service
             angle = angleStep * tokenNum;
 
             double radian = angle * (Math.PI / 180);
-            int distanceFromCenter = (place.Metrics.Width - (int)AppConstants.TokenWidth) / 3;
+            int distanceFromCenter = (place.Metrics.Width - (int)AppConstants.TokenWidth) / 3; // Determines the distance of Tokens from Place. Divider - number for regulation.
 
             int x = parentCenterX + (int)(distanceFromCenter * Math.Cos(radian)) - (int)AppConstants.TokenWidth / 2;
             int y = parentCenterY + (int)(distanceFromCenter * Math.Sin(radian)) - (int)AppConstants.TokenHeight / 2;
