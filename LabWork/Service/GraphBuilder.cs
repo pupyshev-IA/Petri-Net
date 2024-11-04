@@ -9,6 +9,7 @@ namespace LabWork.Service
         public GraphInfo BuildPetriGraph(ScrollableControl layout, List<int> tokenSequence)
         {
             int tokenId = 1;
+            var places = new Dictionary<int, Place>();
             var graphInfo = new GraphInfo();
             var occupancyMatrix = CreateOccupancyMatrix(layout);
 
@@ -16,8 +17,10 @@ namespace LabWork.Service
             {
                 var coordinates = GetRandomPositionInMatrix(occupancyMatrix);
                 var place = CreatePlaceElement(index, coordinates);
-                graphInfo.PlacesInfo.Add(place.Id, place);
+                places.Add(place.Id, place);
             }
+            graphInfo.PlacesInfo = ArrangePlacesBySwapping(places);
+
             foreach (var place in graphInfo.PlacesInfo.Values)
             {
                 var tokenCount = tokenSequence[place.Id - 1];
@@ -28,6 +31,11 @@ namespace LabWork.Service
                     place.Tokens.Add(token);
                     graphInfo.TokensInfo.Add(token.Id, token);
                 }
+            }
+
+            foreach (var index in Enumerable.Range(1, AppConstants.TransitionsMaxCount))
+            {
+
             }
 
             return graphInfo;
@@ -195,6 +203,19 @@ namespace LabWork.Service
             }
 
             return true;
+        }
+
+        private IDictionary<int, Place> ArrangePlacesBySwapping(Dictionary<int, Place> places)
+        {
+            var coordinates = places.Values
+                .OrderBy(place => place.Сoordinates.X)
+                .Select(place => place.Сoordinates)
+                .ToList();
+
+            foreach (var index in Enumerable.Range(1, coordinates.Count))
+                places[index].Сoordinates = coordinates[index - 1];
+
+            return places;
         }
 
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>

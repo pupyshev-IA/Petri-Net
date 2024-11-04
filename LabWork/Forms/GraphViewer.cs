@@ -60,7 +60,7 @@ namespace LabWork
         {
             if (!ValidateInputData())
             {
-                CreateErrorMessage(title: "ќшибка ввода", message: "¬ведены некорректные данные");
+                MessageBox.Show("¬ведены некорректные данные", "ќшибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -122,9 +122,6 @@ namespace LabWork
         private ICollection<int> InitializeTokenSequence() =>
             mTextBoxInputData.Text.Split(InputSeparator)
             .Select(int.Parse)
-            .ToList();
-
-        private void CreateErrorMessage(string title, string message) =>
-            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            .ToList();            
     }
 }
