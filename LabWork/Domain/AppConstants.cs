@@ -19,8 +19,9 @@
 
         // Transition parameters
         public const uint TransitionWidth = 10;
-        public const uint TransitionHeight = 50;
+        public const uint TransitionHeight = 60;
         public static Color TransitionColor = Color.Black;
+        public const uint AdditionalConnectionsNumber = 2;
 
         // Token parameters
         public const uint TokenWidth = 15;
