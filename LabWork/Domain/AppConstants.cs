@@ -35,6 +35,6 @@
         // Graph parameters
         public const uint CellThickness = 1;
         public static Color CellColor = Color.Gray;
-        public const uint CellGap = 2;
+        public const uint CellGap = 3;
     }
 }

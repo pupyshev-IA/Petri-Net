@@ -38,9 +38,10 @@ namespace LabWork.Service
             var unconnectedPlaces = graphInfo.PlacesInfo.Values.OrderBy(place => place.Сoordinates.X).ToList();
             foreach (var index in Enumerable.Range(1, AppConstants.TransitionsMaxCount))
             {
-                var connectedPlaces = GetConnectedPlaces(unconnectedPlaces, random);
-                var transitionPosition = CalculateTransitionPosition(connectedPlaces.ToList());
-                var transition = CreateTransitionElement(index, transitionPosition, connectedPlaces);
+                var transitionPlaces = GetConnectedPlaces(unconnectedPlaces, random);
+                var connectedPlaces = transitionPlaces.incoming.Concat(transitionPlaces.outgoing).ToList();
+                var transitionPosition = CalculateTransitionPosition(connectedPlaces);
+                var transition = CreateTransitionElement(index, transitionPosition, transitionPlaces.incoming, transitionPlaces.outgoing);
 
                 unconnectedPlaces.RemoveRange(0, connectedPlaces.Count - 1);
                 graphInfo.TransitionsInfo.Add(transition.Id, transition);
@@ -98,23 +99,42 @@ namespace LabWork.Service
 
             foreach (var transition in transitions)
             {
-                Point transitionCenter = new Point(
-                    transition.Сoordinates.X + transition.Metrics.Width / 2,
-                    transition.Сoordinates.Y + transition.Metrics.Height / 2
-                );
-
-                foreach (var place in transition.ConnectedPlaces)
+                foreach (var place in transition.IncomingPlaces)
                 {
-                    Point placeCenter = new Point(
-                        place.Сoordinates.X + place.Metrics.Width / 2,
-                        place.Сoordinates.Y + place.Metrics.Height / 2
-                    );
+                    var edgePoints = GetElementsEdgePoints(place, transition);
 
-                    graphics.DrawLine(linePen, placeCenter, transitionCenter);
+                    graphics.DrawLine(linePen, edgePoints.circle, edgePoints.rect);
+                    DrawArrowHead(graphics, linePen, edgePoints.circle, edgePoints.rect);
+                }
+
+                foreach (var place in transition.OutgoingPlaces)
+                {
+                    var edgePoints = GetElementsEdgePoints(place, transition);
+
+                    graphics.DrawLine(linePen, edgePoints.rect, edgePoints.circle);
+                    DrawArrowHead(graphics, linePen, edgePoints.rect, edgePoints.circle);
                 }
             }
 
             linePen.Dispose();
+        }
+
+        private void DrawArrowHead(Graphics graphics, Pen pen, Point start, Point end)
+        {
+            const float arrowHeadLength = 25; // Длина наконечника
+            const float arrowHeadAngle = 15; // Угол в градусах для наконечника
+
+            double angle = Math.Atan2(end.Y - start.Y, end.X - start.X);
+
+            PointF arrowPoint1 = new PointF(
+                end.X - arrowHeadLength * (float)Math.Cos(angle - Math.PI / 180 * arrowHeadAngle),
+                end.Y - arrowHeadLength * (float)Math.Sin(angle - Math.PI / 180 * arrowHeadAngle));
+
+            PointF arrowPoint2 = new PointF(
+                end.X - arrowHeadLength * (float)Math.Cos(angle + Math.PI / 180 * arrowHeadAngle),
+                end.Y - arrowHeadLength * (float)Math.Sin(angle + Math.PI / 180 * arrowHeadAngle));
+
+            graphics.FillPolygon(Brushes.Black, new[] { end, arrowPoint1, arrowPoint2 });
         }
 
         private Place CreatePlaceElement(int id, Point coordinates)
@@ -141,14 +161,15 @@ namespace LabWork.Service
             return token;
         }
 
-        private Transition CreateTransitionElement(int id, Point coordinates, ICollection<Place> connectedPlaces)
+        private Transition CreateTransitionElement(int id, Point coordinates, ICollection<Place> incomingPlaces, ICollection<Place> outgoingPlaces)
         {
             var transition = new Transition
             {
                 Id = id,
                 Сoordinates = coordinates,
                 Metrics = new Size((int)AppConstants.TransitionWidth, (int)AppConstants.TransitionHeight),
-                ConnectedPlaces = connectedPlaces
+                IncomingPlaces = incomingPlaces,
+                OutgoingPlaces = outgoingPlaces
             };
 
             return transition;
@@ -204,38 +225,39 @@ namespace LabWork.Service
             return occupancyMatrix;
         }
 
-        private ICollection<Place> GetConnectedPlaces(List<Place> unconnectedPlaces, Random random)
+        private (ICollection<Place> incoming, ICollection<Place> outgoing) GetConnectedPlaces(List<Place> unconnectedPlaces, Random random)
         {
             var currentPlace = unconnectedPlaces.First();
-            var connectedPlaces = new List<Place> { currentPlace };
+            var incomingPlaces = new List<Place> { currentPlace };
+            var outgoingPlaces = new List<Place>();
 
             int maxValue = (int)Math.Ceiling((double)unconnectedPlaces.Count / AppConstants.TransitionsMaxCount);
             int placesPerTransition = random.Next(1, Math.Min(maxValue, unconnectedPlaces.Count) + 1);
 
-            connectedPlaces.AddRange(unconnectedPlaces.Skip(1).Take(placesPerTransition));
+            outgoingPlaces.AddRange(unconnectedPlaces.Skip(1).Take(placesPerTransition));
 
-            return connectedPlaces;
+            return (incomingPlaces, outgoingPlaces);
         }
 
         private void UpdateLastTransitionWithRemainingPlaces(GraphInfo graphInfo, List<Place> remainingPlaces)
         {
             var lastTransition = graphInfo.TransitionsInfo.Values.Last();
-            var updatedConnectedPlaces = lastTransition.ConnectedPlaces.ToList();
+            var outgoingPlaces = lastTransition.OutgoingPlaces.ToList();
 
-            updatedConnectedPlaces.AddRange(remainingPlaces);
-            var updatedPosition = CalculateTransitionPosition(updatedConnectedPlaces);
+            outgoingPlaces.AddRange(remainingPlaces);
+            var updatedPosition = CalculateTransitionPosition(outgoingPlaces.Concat(lastTransition.IncomingPlaces).ToList());
 
-            lastTransition.ConnectedPlaces = updatedConnectedPlaces;
+            lastTransition.OutgoingPlaces = outgoingPlaces;
             lastTransition.Сoordinates = updatedPosition;
         }
 
         private void AddNearestPlaceToRandomTransition(GraphInfo graphInfo, Random random)
         {
             var minConnections = graphInfo.TransitionsInfo.Values
-                .Min(transition => transition.ConnectedPlaces.Count);
+                .Min(transition => transition.IncomingPlaces.Count + transition.OutgoingPlaces.Count);
 
             var transitionsWithMinConnections = graphInfo.TransitionsInfo.Values
-                .Where(transition => transition.ConnectedPlaces.Count == minConnections)
+                .Where(transition => transition.IncomingPlaces.Count + transition.OutgoingPlaces.Count == minConnections)
                 .ToList();
 
             foreach (var _ in Enumerable.Range(1, (int)AppConstants.AdditionalConnectionsNumber))
@@ -248,8 +270,9 @@ namespace LabWork.Service
 
                 if (nearestPlace != null)
                 {
-                    randomTransition.ConnectedPlaces.Add(nearestPlace);
-                    var updatedPosition = CalculateTransitionPosition(randomTransition.ConnectedPlaces.ToList());
+                    randomTransition.IncomingPlaces.Add(nearestPlace);
+                    randomTransition.OutgoingPlaces.Add(nearestPlace);
+                    var updatedPosition = CalculateTransitionPosition(randomTransition.IncomingPlaces.Concat(randomTransition.OutgoingPlaces).ToList());
                     randomTransition.Сoordinates = updatedPosition;
 
                     transitionsWithMinConnections.Remove(randomTransition);
@@ -259,7 +282,7 @@ namespace LabWork.Service
 
         private Place FindNearestUnconnectedPlace(Transition transition, List<Place> allPlaces)
         {
-            var connectedPlaces = transition.ConnectedPlaces.ToHashSet();
+            var connectedPlaces = transition.IncomingPlaces.Concat(transition.OutgoingPlaces).ToHashSet();
 
             Place nearestPlace = null;
             double minDistance = double.MaxValue;
@@ -342,8 +365,56 @@ namespace LabWork.Service
             return new Point(avgX, avgY);
         }
 
+        private (Point circle, Point rect) GetElementsEdgePoints(Place place, Transition transition)
+        {
+            Point placeCenter = GetElementCenter(place);
+            Point transitionCenter = GetElementCenter(transition);
+
+            double angle = Math.Atan2(transitionCenter.Y - placeCenter.Y, transitionCenter.X - placeCenter.X);
+            var radius = (int)AppConstants.PlaceWidth / 2;
+
+            Rectangle rect = new Rectangle(transition.Сoordinates, transition.Metrics);
+
+            Point edgePointCircle = GetEdgePointCircle(placeCenter, radius, angle);
+            Point edgePointRect = GetEdgePointRect(rect, angle + Math.PI);
+
+            return (edgePointCircle, edgePointRect);
+        }
+
+        private Point GetEdgePointCircle(Point center, int radius, double angle)
+        {
+            return new Point(
+                (int)(center.X + radius * Math.Cos(angle)),
+                (int)(center.Y + radius * Math.Sin(angle))
+            );
+        }
+
+        private Point GetEdgePointRect(Rectangle rect, double angle)
+        {
+            double tanAngle = Math.Tan(angle);
+            Point center = new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+
+            if (Math.Abs(tanAngle) < (double)rect.Height / rect.Width)
+            {
+                if (angle > -Math.PI / 2 && angle < Math.PI / 2)
+                    return new Point(rect.Right, (int)(center.Y + (rect.Width / 2) * tanAngle));
+                else
+                    return new Point(rect.Left, (int)(center.Y - (rect.Width / 2) * tanAngle));
+            }
+            else
+            {
+                if (angle >= 0)
+                    return new Point((int)(center.X + (rect.Height / 2) / tanAngle), rect.Bottom);
+                else
+                    return new Point((int)(center.X - (rect.Height / 2) / tanAngle), rect.Top);
+            }
+        }
+
         private Point ConvertIndexPositionToPoint(int rowIndex, int columnIndex) =>
             new Point((int)(columnIndex * AppConstants.PlaceHeight), (int)(rowIndex * AppConstants.PlaceWidth));
+
+        private Point GetElementCenter(GraphElement element) =>
+            new Point(element.Сoordinates.X + element.Metrics.Width / 2, element.Сoordinates.Y + element.Metrics.Height / 2);
 
         private double CalculateDistance(Point coords1, Point coords2) =>
             Math.Sqrt(Math.Pow(coords1.X - coords2.X, 2) + Math.Pow(coords1.Y - coords2.Y, 2));

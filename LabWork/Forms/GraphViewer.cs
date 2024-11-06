@@ -93,7 +93,7 @@ namespace LabWork
             _currentStage = 1;
             _currentTokenSequence = InitializeTokenSequence();
             _graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
-            _stages = new PetriNetEngine(_graphInfo).Simulate();
+            //_stages = new PetriNetEngine(_graphInfo).Simulate();
 
             ShowCurrentStage(graphics);
         }

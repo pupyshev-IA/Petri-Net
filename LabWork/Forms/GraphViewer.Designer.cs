@@ -72,7 +72,7 @@
             panelMain.Dock = DockStyle.Fill;
             panelMain.Location = new Point(2, 2);
             panelMain.Name = "panelMain";
-            panelMain.Size = new Size(898, 618);
+            panelMain.Size = new Size(998, 718);
             panelMain.TabIndex = 0;
             panelMain.MouseDown += panelMain_MouseDown;
             // 
@@ -84,18 +84,18 @@
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tlpOutput.ForeColor = Color.Black;
-            tlpOutput.Location = new Point(5, 546);
+            tlpOutput.Location = new Point(5, 646);
             tlpOutput.Name = "tlpOutput";
             tlpOutput.RowCount = 2;
             tlpOutput.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlpOutput.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlpOutput.Size = new Size(883, 62);
+            tlpOutput.Size = new Size(983, 62);
             tlpOutput.TabIndex = 6;
             // 
             // lblOutput
             // 
             lblOutput.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblOutput.Location = new Point(350, 508);
+            lblOutput.Location = new Point(400, 608);
             lblOutput.Margin = new Padding(350, 0, 350, 0);
             lblOutput.Name = "lblOutput";
             lblOutput.Size = new Size(191, 35);
@@ -107,10 +107,10 @@
             // 
             panelOuterSettingsHolder.BackColor = Color.FromArgb(120, 120, 120);
             panelOuterSettingsHolder.Controls.Add(panelSettingsHolder);
-            panelOuterSettingsHolder.Location = new Point(661, 87);
+            panelOuterSettingsHolder.Location = new Point(761, 127);
             panelOuterSettingsHolder.Name = "panelOuterSettingsHolder";
             panelOuterSettingsHolder.Padding = new Padding(1);
-            panelOuterSettingsHolder.Size = new Size(227, 417);
+            panelOuterSettingsHolder.Size = new Size(227, 450);
             panelOuterSettingsHolder.TabIndex = 4;
             // 
             // panelSettingsHolder
@@ -121,7 +121,7 @@
             panelSettingsHolder.Location = new Point(1, 1);
             panelSettingsHolder.Name = "panelSettingsHolder";
             panelSettingsHolder.Padding = new Padding(15, 10, 15, 10);
-            panelSettingsHolder.Size = new Size(225, 415);
+            panelSettingsHolder.Size = new Size(225, 448);
             panelSettingsHolder.TabIndex = 0;
             // 
             // tlpSettings
@@ -143,7 +143,7 @@
             tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 61F));
             tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tlpSettings.Size = new Size(195, 395);
+            tlpSettings.Size = new Size(195, 428);
             tlpSettings.TabIndex = 0;
             // 
             // tlpInfo
@@ -157,14 +157,14 @@
             tlpInfo.Controls.Add(lblNumberOfFirings, 0, 0);
             tlpInfo.Dock = DockStyle.Fill;
             tlpInfo.ForeColor = Color.Black;
-            tlpInfo.Location = new Point(3, 116);
+            tlpInfo.Location = new Point(3, 125);
             tlpInfo.Name = "tlpInfo";
             tlpInfo.RowCount = 4;
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tlpInfo.Size = new Size(189, 234);
+            tlpInfo.Size = new Size(189, 255);
             tlpInfo.TabIndex = 6;
             // 
             // lblTransitionsMaxCount
@@ -172,9 +172,9 @@
             lblTransitionsMaxCount.Dock = DockStyle.Fill;
             lblTransitionsMaxCount.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             lblTransitionsMaxCount.ForeColor = Color.Black;
-            lblTransitionsMaxCount.Location = new Point(4, 117);
+            lblTransitionsMaxCount.Location = new Point(4, 127);
             lblTransitionsMaxCount.Name = "lblTransitionsMaxCount";
-            lblTransitionsMaxCount.Size = new Size(181, 57);
+            lblTransitionsMaxCount.Size = new Size(181, 62);
             lblTransitionsMaxCount.TabIndex = 29;
             lblTransitionsMaxCount.Text = "Максимальное число переходов:";
             lblTransitionsMaxCount.TextAlign = ContentAlignment.MiddleLeft;
@@ -184,9 +184,9 @@
             lblPlacesMaxCount.Dock = DockStyle.Fill;
             lblPlacesMaxCount.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             lblPlacesMaxCount.ForeColor = Color.Black;
-            lblPlacesMaxCount.Location = new Point(4, 59);
+            lblPlacesMaxCount.Location = new Point(4, 64);
             lblPlacesMaxCount.Name = "lblPlacesMaxCount";
-            lblPlacesMaxCount.Size = new Size(181, 57);
+            lblPlacesMaxCount.Size = new Size(181, 62);
             lblPlacesMaxCount.TabIndex = 26;
             lblPlacesMaxCount.Text = "Максимальное число мест:";
             lblPlacesMaxCount.TextAlign = ContentAlignment.MiddleLeft;
@@ -196,9 +196,9 @@
             lblTokensMaxCount.Dock = DockStyle.Fill;
             lblTokensMaxCount.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             lblTokensMaxCount.ForeColor = Color.Black;
-            lblTokensMaxCount.Location = new Point(4, 175);
+            lblTokensMaxCount.Location = new Point(4, 190);
             lblTokensMaxCount.Name = "lblTokensMaxCount";
-            lblTokensMaxCount.Size = new Size(181, 58);
+            lblTokensMaxCount.Size = new Size(181, 64);
             lblTokensMaxCount.TabIndex = 23;
             lblTokensMaxCount.Text = "Максимальное число меток:";
             lblTokensMaxCount.TextAlign = ContentAlignment.MiddleLeft;
@@ -210,7 +210,7 @@
             lblNumberOfFirings.ForeColor = Color.Black;
             lblNumberOfFirings.Location = new Point(4, 1);
             lblNumberOfFirings.Name = "lblNumberOfFirings";
-            lblNumberOfFirings.Size = new Size(181, 57);
+            lblNumberOfFirings.Size = new Size(181, 62);
             lblNumberOfFirings.TabIndex = 14;
             lblNumberOfFirings.Text = "Максимальное число срабатываний СП:";
             lblNumberOfFirings.TextAlign = ContentAlignment.MiddleLeft;
@@ -222,10 +222,10 @@
             btnCreateGraph.FlatStyle = FlatStyle.Flat;
             btnCreateGraph.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             btnCreateGraph.ForeColor = Color.White;
-            btnCreateGraph.Location = new Point(0, 74);
+            btnCreateGraph.Location = new Point(0, 80);
             btnCreateGraph.Margin = new Padding(0);
             btnCreateGraph.Name = "btnCreateGraph";
-            btnCreateGraph.Size = new Size(195, 39);
+            btnCreateGraph.Size = new Size(195, 42);
             btnCreateGraph.TabIndex = 7;
             btnCreateGraph.Text = "Отобразить граф";
             btnCreateGraph.UseVisualStyleBackColor = false;
@@ -238,7 +238,7 @@
             lblInput.Location = new Point(0, 0);
             lblInput.Margin = new Padding(0);
             lblInput.Name = "lblInput";
-            lblInput.Size = new Size(195, 39);
+            lblInput.Size = new Size(195, 42);
             lblInput.TabIndex = 4;
             lblInput.Text = "Входные данные:";
             lblInput.TextAlign = ContentAlignment.MiddleCenter;
@@ -247,7 +247,7 @@
             // 
             mTextBoxInputData.Dock = DockStyle.Fill;
             mTextBoxInputData.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            mTextBoxInputData.Location = new Point(0, 39);
+            mTextBoxInputData.Location = new Point(0, 42);
             mTextBoxInputData.Margin = new Padding(0);
             mTextBoxInputData.Mask = "0;  0;  0;  0;  0;  0;  0";
             mTextBoxInputData.Name = "mTextBoxInputData";
@@ -264,7 +264,7 @@
             tlpNavigation.Controls.Add(btnForward, 2, 0);
             tlpNavigation.Controls.Add(lblStage, 1, 0);
             tlpNavigation.Controls.Add(btnBack, 0, 0);
-            tlpNavigation.Location = new Point(0, 353);
+            tlpNavigation.Location = new Point(0, 383);
             tlpNavigation.Margin = new Padding(0);
             tlpNavigation.Name = "tlpNavigation";
             tlpNavigation.RowCount = 1;
@@ -318,7 +318,7 @@
             panelOuterView.Location = new Point(3, 3);
             panelOuterView.Name = "panelOuterView";
             panelOuterView.Padding = new Padding(1);
-            panelOuterView.Size = new Size(652, 502);
+            panelOuterView.Size = new Size(752, 602);
             panelOuterView.TabIndex = 1;
             // 
             // panelView
@@ -327,7 +327,7 @@
             panelView.Dock = DockStyle.Fill;
             panelView.Location = new Point(1, 1);
             panelView.Name = "panelView";
-            panelView.Size = new Size(650, 500);
+            panelView.Size = new Size(750, 600);
             panelView.TabIndex = 1;
             panelView.Paint += panelView_Paint;
             // 
@@ -338,7 +338,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold);
             btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(853, 10);
+            btnClose.Location = new Point(953, 10);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(35, 35);
             btnClose.TabIndex = 0;
@@ -354,7 +354,7 @@
             panelOuterMain.Location = new Point(0, 0);
             panelOuterMain.Name = "panelOuterMain";
             panelOuterMain.Padding = new Padding(2);
-            panelOuterMain.Size = new Size(902, 622);
+            panelOuterMain.Size = new Size(1002, 722);
             panelOuterMain.TabIndex = 1;
             // 
             // GraphViewer
@@ -362,7 +362,7 @@
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(902, 622);
+            ClientSize = new Size(1002, 722);
             Controls.Add(panelOuterMain);
             Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FormBorderStyle = FormBorderStyle.None;
