@@ -1,5 +1,6 @@
 using LabWork.Abstractions;
 using LabWork.Domain;
+using LabWork.Service;
 
 namespace LabWork
 {
@@ -8,18 +9,21 @@ namespace LabWork
         private const string InputSeparator = ";  ";
         private const string WhiteSpace = "   ";
 
+        private Action<Graphics> _action;
         private string _currentStageText = "Этап: {0}";
         private int _currentStage = 1;
 
         private IGraphBuilder _graphBuilder;
         private ICollection<int>? _currentTokenSequence;
         private GraphInfo? _graphInfo;
+        private List<GraphInfo> _stages;
 
         public GraphViewer(IGraphBuilder graphBuilder)
         {
             InitializeComponent();
 
             _graphBuilder = graphBuilder;
+            _action = InitializeNewPetriNet;
 
             panelView.Visible = false; // Prevents the panel from redrawing when the form is first launched.
             SetValuesForInfoLabels();
@@ -48,15 +52,37 @@ namespace LabWork
         }
         /*_________________________________________________________________________________________*/
 
-        private void panelView_Paint(object sender, PaintEventArgs e)
-        {
-            _graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
-
-            Graphics graphics = e.Graphics;
-            _graphBuilder.VisualizePetriGraph(_graphInfo, panelView, graphics);
-        }
+        private void panelView_Paint(object sender, PaintEventArgs e) =>
+            _action(e.Graphics);
 
         private void btnCreateGraph_Click(object sender, EventArgs e)
+        {
+            panelView.Visible = true;
+            _action = InitializeNewPetriNet;
+
+            panelView.Invalidate();
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            _currentStage--;
+            _action = ShowCurrentStage;
+
+            panelView.Invalidate();
+        }
+
+        private void btnForward_Click(object sender, EventArgs e)
+        {
+            _currentStage++;
+            _action = ShowCurrentStage;
+
+            panelView.Invalidate();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e) =>
+            Application.Exit();
+
+        private void InitializeNewPetriNet(Graphics graphics)
         {
             if (!ValidateInputData())
             {
@@ -64,31 +90,23 @@ namespace LabWork
                 return;
             }
 
-            _currentTokenSequence = InitializeTokenSequence();
             _currentStage = 1;
-            SetValueForStageLabel();
-            UpdateButtonsStatus();
+            _currentTokenSequence = InitializeTokenSequence();
+            _graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
+            _stages = new PetriNetEngine(_graphInfo).Simulate();
 
-            panelView.Visible = true;
-            panelView.Invalidate();
+            ShowCurrentStage(graphics);
         }
 
-        private void btnBack_Click(object sender, EventArgs e)
+        private void ShowCurrentStage(Graphics graphics)
         {
-            _currentStage--;
+            //_graphInfo = _stages[_currentStage - 1];
+
             SetValueForStageLabel();
             UpdateButtonsStatus();
-        }
 
-        private void btnForward_Click(object sender, EventArgs e)
-        {
-            _currentStage++;
-            SetValueForStageLabel();
-            UpdateButtonsStatus();
+            _graphBuilder.VisualizePetriGraph(_graphInfo, panelView, graphics);
         }
-
-        private void btnClose_Click(object sender, EventArgs e) =>
-            Application.Exit();
 
         private void SetValueForStageLabel() =>
             lblStage.Text = string.Format(_currentStageText, _currentStage);
