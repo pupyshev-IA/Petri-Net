@@ -77,9 +77,19 @@ namespace LabWork.Service
                 graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
 
             foreach (var transition in graphInfo.TransitionsInfo.Values)
+            {
                 graphics.FillRectangle(transitionBrush, new Rectangle(transition.Сoordinates, transition.Metrics));
 
+                Point markerPosition = new Point(transition.Сoordinates.X - 20, transition.Сoordinates.Y);
+                graphics.DrawString("t" + transition.Id.ToString(), textFont, textBrush, markerPosition);
+            }
+
             DrawConnectingLines(graphics, graphInfo.TransitionsInfo.Values);
+
+            textBrush.Dispose();
+            placePen.Dispose();
+            tokenBrush.Dispose();
+            transitionBrush.Dispose();
         }
 
         private void DrawCells(ScrollableControl layout, Graphics graphics)
@@ -91,6 +101,8 @@ namespace LabWork.Service
 
             for (int y = 0; y <= layout.Height; y += (int)AppConstants.PlaceHeight)
                 graphics.DrawLine(pen, 0, y, layout.Width, y);
+
+            pen.Dispose();
         }
 
         private void DrawConnectingLines(Graphics graphics, ICollection<Transition> transitions)
@@ -131,7 +143,10 @@ namespace LabWork.Service
                 end.X - AppConstants.ArrowHeadLength * (float)Math.Cos(angle + Math.PI / 180 * AppConstants.ArrowHeadAngle),
                 end.Y - AppConstants.ArrowHeadLength * (float)Math.Sin(angle + Math.PI / 180 * AppConstants.ArrowHeadAngle));
 
-            graphics.FillPolygon(Brushes.Black, new[] { end, arrowPoint1, arrowPoint2 });
+            SolidBrush arrowHeadBrush = new SolidBrush(AppConstants.LineColor);
+            graphics.FillPolygon(arrowHeadBrush, new[] { end, arrowPoint1, arrowPoint2 });
+
+            arrowHeadBrush.Dispose();
         }
 
         private Place CreatePlaceElement(int id, Point coordinates)
