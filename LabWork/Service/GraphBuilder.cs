@@ -121,18 +121,15 @@ namespace LabWork.Service
 
         private void DrawArrowHead(Graphics graphics, Pen pen, Point start, Point end)
         {
-            const float arrowHeadLength = 25; // Длина наконечника
-            const float arrowHeadAngle = 15; // Угол в градусах для наконечника
-
             double angle = Math.Atan2(end.Y - start.Y, end.X - start.X);
 
             PointF arrowPoint1 = new PointF(
-                end.X - arrowHeadLength * (float)Math.Cos(angle - Math.PI / 180 * arrowHeadAngle),
-                end.Y - arrowHeadLength * (float)Math.Sin(angle - Math.PI / 180 * arrowHeadAngle));
+                end.X - AppConstants.ArrowHeadLength * (float)Math.Cos(angle - Math.PI / 180 * AppConstants.ArrowHeadAngle),
+                end.Y - AppConstants.ArrowHeadLength * (float)Math.Sin(angle - Math.PI / 180 * AppConstants.ArrowHeadAngle));
 
             PointF arrowPoint2 = new PointF(
-                end.X - arrowHeadLength * (float)Math.Cos(angle + Math.PI / 180 * arrowHeadAngle),
-                end.Y - arrowHeadLength * (float)Math.Sin(angle + Math.PI / 180 * arrowHeadAngle));
+                end.X - AppConstants.ArrowHeadLength * (float)Math.Cos(angle + Math.PI / 180 * AppConstants.ArrowHeadAngle),
+                end.Y - AppConstants.ArrowHeadLength * (float)Math.Sin(angle + Math.PI / 180 * AppConstants.ArrowHeadAngle));
 
             graphics.FillPolygon(Brushes.Black, new[] { end, arrowPoint1, arrowPoint2 });
         }

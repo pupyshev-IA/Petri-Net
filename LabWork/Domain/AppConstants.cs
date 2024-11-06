@@ -31,6 +31,8 @@
         // Line parameters
         public const uint LineThickness = 2;
         public static Color LineColor = Color.Black;
+        public const float ArrowHeadLength = 25;
+        public const float ArrowHeadAngle = 15;
 
         // Graph parameters
         public const uint CellThickness = 1;
