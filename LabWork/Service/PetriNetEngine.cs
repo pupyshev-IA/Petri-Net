@@ -50,7 +50,7 @@ namespace LabWork.Service
             transition.IncomingPlaces = incomingPlaces;
             transition.OutgoingPlaces = outgoingPlaces;
 
-            graphBuilder.UpdateTokensPositionForPlace(new List<Place> { placeFrom, placeTo });
+            graphBuilder.UpdateTokensPositionForPlaces(new List<Place> { placeFrom, placeTo });
         }
 
         private static List<Transition> GetActiveTransitions(List<Transition> transitions) =>

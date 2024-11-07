@@ -35,18 +35,19 @@
             panelOuterSettingsHolder = new Panel();
             panelSettingsHolder = new Panel();
             tlpSettings = new TableLayoutPanel();
-            tlpInfo = new TableLayoutPanel();
-            lblTransitionsMaxCount = new Label();
-            lblPlacesMaxCount = new Label();
-            lblTokensMaxCount = new Label();
-            lblNumberOfFirings = new Label();
-            btnCreateGraph = new Button();
+            btnUpdateTokenSequence = new Button();
             lblInput = new Label();
+            btnCreateGraph = new Button();
             mTextBoxInputData = new MaskedTextBox();
             tlpNavigation = new TableLayoutPanel();
             btnForward = new Button();
             lblStage = new Label();
             btnBack = new Button();
+            tlpInfo = new TableLayoutPanel();
+            lblTransitionsMaxCount = new Label();
+            lblPlacesMaxCount = new Label();
+            lblTokensMaxCount = new Label();
+            lblNumberOfFirings = new Label();
             panelOuterView = new Panel();
             panelView = new Panel();
             btnClose = new Button();
@@ -55,8 +56,8 @@
             panelOuterSettingsHolder.SuspendLayout();
             panelSettingsHolder.SuspendLayout();
             tlpSettings.SuspendLayout();
-            tlpInfo.SuspendLayout();
             tlpNavigation.SuspendLayout();
+            tlpInfo.SuspendLayout();
             panelOuterView.SuspendLayout();
             panelOuterMain.SuspendLayout();
             SuspendLayout();
@@ -107,10 +108,10 @@
             // 
             panelOuterSettingsHolder.BackColor = Color.FromArgb(120, 120, 120);
             panelOuterSettingsHolder.Controls.Add(panelSettingsHolder);
-            panelOuterSettingsHolder.Location = new Point(761, 127);
+            panelOuterSettingsHolder.Location = new Point(761, 105);
             panelOuterSettingsHolder.Name = "panelOuterSettingsHolder";
             panelOuterSettingsHolder.Padding = new Padding(1);
-            panelOuterSettingsHolder.Size = new Size(227, 450);
+            panelOuterSettingsHolder.Size = new Size(227, 500);
             panelOuterSettingsHolder.TabIndex = 4;
             // 
             // panelSettingsHolder
@@ -121,30 +122,147 @@
             panelSettingsHolder.Location = new Point(1, 1);
             panelSettingsHolder.Name = "panelSettingsHolder";
             panelSettingsHolder.Padding = new Padding(15, 10, 15, 10);
-            panelSettingsHolder.Size = new Size(225, 448);
+            panelSettingsHolder.Size = new Size(225, 498);
             panelSettingsHolder.TabIndex = 0;
             // 
             // tlpSettings
             // 
             tlpSettings.ColumnCount = 1;
             tlpSettings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpSettings.Controls.Add(tlpInfo, 0, 3);
-            tlpSettings.Controls.Add(btnCreateGraph, 0, 2);
+            tlpSettings.Controls.Add(btnUpdateTokenSequence, 0, 3);
             tlpSettings.Controls.Add(lblInput, 0, 0);
+            tlpSettings.Controls.Add(btnCreateGraph, 0, 2);
             tlpSettings.Controls.Add(mTextBoxInputData, 0, 1);
-            tlpSettings.Controls.Add(tlpNavigation, 0, 4);
+            tlpSettings.Controls.Add(tlpNavigation, 0, 5);
+            tlpSettings.Controls.Add(tlpInfo, 0, 4);
             tlpSettings.Dock = DockStyle.Fill;
             tlpSettings.Location = new Point(15, 10);
             tlpSettings.Margin = new Padding(0);
             tlpSettings.Name = "tlpSettings";
-            tlpSettings.RowCount = 5;
-            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tlpSettings.RowCount = 6;
             tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
-            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 61F));
-            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tlpSettings.Size = new Size(195, 428);
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 55F));
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 9F));
+            tlpSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tlpSettings.Size = new Size(195, 478);
             tlpSettings.TabIndex = 0;
+            // 
+            // btnUpdateTokenSequence
+            // 
+            btnUpdateTokenSequence.BackColor = Color.FromArgb(27, 117, 208);
+            btnUpdateTokenSequence.Dock = DockStyle.Fill;
+            btnUpdateTokenSequence.Enabled = false;
+            btnUpdateTokenSequence.FlatStyle = FlatStyle.Flat;
+            btnUpdateTokenSequence.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnUpdateTokenSequence.ForeColor = Color.White;
+            btnUpdateTokenSequence.Location = new Point(0, 129);
+            btnUpdateTokenSequence.Margin = new Padding(0);
+            btnUpdateTokenSequence.Name = "btnUpdateTokenSequence";
+            btnUpdateTokenSequence.Size = new Size(195, 43);
+            btnUpdateTokenSequence.TabIndex = 7;
+            btnUpdateTokenSequence.Text = "Обновить метки";
+            btnUpdateTokenSequence.UseVisualStyleBackColor = false;
+            btnUpdateTokenSequence.Click += btnUpdateTokenSequence_Click;
+            // 
+            // lblInput
+            // 
+            lblInput.Dock = DockStyle.Fill;
+            lblInput.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            lblInput.Location = new Point(0, 0);
+            lblInput.Margin = new Padding(0);
+            lblInput.Name = "lblInput";
+            lblInput.Size = new Size(195, 43);
+            lblInput.TabIndex = 4;
+            lblInput.Text = "Входные данные:";
+            lblInput.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // btnCreateGraph
+            // 
+            btnCreateGraph.BackColor = Color.FromArgb(27, 117, 208);
+            btnCreateGraph.Dock = DockStyle.Fill;
+            btnCreateGraph.FlatStyle = FlatStyle.Flat;
+            btnCreateGraph.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnCreateGraph.ForeColor = Color.White;
+            btnCreateGraph.Location = new Point(0, 86);
+            btnCreateGraph.Margin = new Padding(0);
+            btnCreateGraph.Name = "btnCreateGraph";
+            btnCreateGraph.Size = new Size(195, 43);
+            btnCreateGraph.TabIndex = 7;
+            btnCreateGraph.Text = "Отобразить граф";
+            btnCreateGraph.UseVisualStyleBackColor = false;
+            btnCreateGraph.Click += btnCreateGraph_Click;
+            // 
+            // mTextBoxInputData
+            // 
+            mTextBoxInputData.Dock = DockStyle.Fill;
+            mTextBoxInputData.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            mTextBoxInputData.Location = new Point(0, 43);
+            mTextBoxInputData.Margin = new Padding(0);
+            mTextBoxInputData.Mask = "0;  0;  0;  0;  0;  0;  0";
+            mTextBoxInputData.Name = "mTextBoxInputData";
+            mTextBoxInputData.Size = new Size(195, 33);
+            mTextBoxInputData.TabIndex = 5;
+            mTextBoxInputData.TextAlign = HorizontalAlignment.Center;
+            // 
+            // tlpNavigation
+            // 
+            tlpNavigation.ColumnCount = 3;
+            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tlpNavigation.Controls.Add(btnForward, 2, 0);
+            tlpNavigation.Controls.Add(lblStage, 1, 0);
+            tlpNavigation.Controls.Add(btnBack, 0, 0);
+            tlpNavigation.Dock = DockStyle.Fill;
+            tlpNavigation.Location = new Point(0, 434);
+            tlpNavigation.Margin = new Padding(0);
+            tlpNavigation.Name = "tlpNavigation";
+            tlpNavigation.RowCount = 1;
+            tlpNavigation.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpNavigation.Size = new Size(195, 44);
+            tlpNavigation.TabIndex = 8;
+            // 
+            // btnForward
+            // 
+            btnForward.BackColor = Color.White;
+            btnForward.Cursor = Cursors.Hand;
+            btnForward.Dock = DockStyle.Fill;
+            btnForward.Enabled = false;
+            btnForward.Image = (Image)resources.GetObject("btnForward.Image");
+            btnForward.Location = new Point(159, 3);
+            btnForward.Name = "btnForward";
+            btnForward.Size = new Size(33, 38);
+            btnForward.TabIndex = 3;
+            btnForward.UseVisualStyleBackColor = false;
+            btnForward.Click += btnForward_Click;
+            // 
+            // lblStage
+            // 
+            lblStage.Dock = DockStyle.Fill;
+            lblStage.Location = new Point(42, 3);
+            lblStage.Margin = new Padding(3);
+            lblStage.Name = "lblStage";
+            lblStage.Size = new Size(111, 38);
+            lblStage.TabIndex = 6;
+            lblStage.Text = "label";
+            lblStage.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.White;
+            btnBack.Cursor = Cursors.Hand;
+            btnBack.Dock = DockStyle.Fill;
+            btnBack.Enabled = false;
+            btnBack.Image = (Image)resources.GetObject("btnBack.Image");
+            btnBack.Location = new Point(3, 3);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(33, 38);
+            btnBack.TabIndex = 2;
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // tlpInfo
             // 
@@ -157,14 +275,14 @@
             tlpInfo.Controls.Add(lblNumberOfFirings, 0, 0);
             tlpInfo.Dock = DockStyle.Fill;
             tlpInfo.ForeColor = Color.Black;
-            tlpInfo.Location = new Point(3, 125);
+            tlpInfo.Location = new Point(3, 175);
             tlpInfo.Name = "tlpInfo";
             tlpInfo.RowCount = 4;
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tlpInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tlpInfo.Size = new Size(189, 255);
+            tlpInfo.Size = new Size(189, 256);
             tlpInfo.TabIndex = 6;
             // 
             // lblTransitionsMaxCount
@@ -198,7 +316,7 @@
             lblTokensMaxCount.ForeColor = Color.Black;
             lblTokensMaxCount.Location = new Point(4, 190);
             lblTokensMaxCount.Name = "lblTokensMaxCount";
-            lblTokensMaxCount.Size = new Size(181, 64);
+            lblTokensMaxCount.Size = new Size(181, 65);
             lblTokensMaxCount.TabIndex = 23;
             lblTokensMaxCount.Text = "Максимальное число меток:";
             lblTokensMaxCount.TextAlign = ContentAlignment.MiddleLeft;
@@ -214,102 +332,6 @@
             lblNumberOfFirings.TabIndex = 14;
             lblNumberOfFirings.Text = "Максимальное число срабатываний СП:";
             lblNumberOfFirings.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // btnCreateGraph
-            // 
-            btnCreateGraph.BackColor = Color.FromArgb(27, 117, 208);
-            btnCreateGraph.Dock = DockStyle.Fill;
-            btnCreateGraph.FlatStyle = FlatStyle.Flat;
-            btnCreateGraph.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnCreateGraph.ForeColor = Color.White;
-            btnCreateGraph.Location = new Point(0, 80);
-            btnCreateGraph.Margin = new Padding(0);
-            btnCreateGraph.Name = "btnCreateGraph";
-            btnCreateGraph.Size = new Size(195, 42);
-            btnCreateGraph.TabIndex = 7;
-            btnCreateGraph.Text = "Отобразить граф";
-            btnCreateGraph.UseVisualStyleBackColor = false;
-            btnCreateGraph.Click += btnCreateGraph_Click;
-            // 
-            // lblInput
-            // 
-            lblInput.Dock = DockStyle.Fill;
-            lblInput.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            lblInput.Location = new Point(0, 0);
-            lblInput.Margin = new Padding(0);
-            lblInput.Name = "lblInput";
-            lblInput.Size = new Size(195, 42);
-            lblInput.TabIndex = 4;
-            lblInput.Text = "Входные данные:";
-            lblInput.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // mTextBoxInputData
-            // 
-            mTextBoxInputData.Dock = DockStyle.Fill;
-            mTextBoxInputData.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            mTextBoxInputData.Location = new Point(0, 42);
-            mTextBoxInputData.Margin = new Padding(0);
-            mTextBoxInputData.Mask = "0;  0;  0;  0;  0;  0;  0";
-            mTextBoxInputData.Name = "mTextBoxInputData";
-            mTextBoxInputData.Size = new Size(195, 33);
-            mTextBoxInputData.TabIndex = 5;
-            mTextBoxInputData.TextAlign = HorizontalAlignment.Center;
-            // 
-            // tlpNavigation
-            // 
-            tlpNavigation.ColumnCount = 3;
-            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-            tlpNavigation.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpNavigation.Controls.Add(btnForward, 2, 0);
-            tlpNavigation.Controls.Add(lblStage, 1, 0);
-            tlpNavigation.Controls.Add(btnBack, 0, 0);
-            tlpNavigation.Location = new Point(0, 383);
-            tlpNavigation.Margin = new Padding(0);
-            tlpNavigation.Name = "tlpNavigation";
-            tlpNavigation.RowCount = 1;
-            tlpNavigation.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpNavigation.Size = new Size(195, 41);
-            tlpNavigation.TabIndex = 8;
-            // 
-            // btnForward
-            // 
-            btnForward.BackColor = Color.White;
-            btnForward.Cursor = Cursors.Hand;
-            btnForward.Dock = DockStyle.Fill;
-            btnForward.Enabled = false;
-            btnForward.Image = (Image)resources.GetObject("btnForward.Image");
-            btnForward.Location = new Point(159, 3);
-            btnForward.Name = "btnForward";
-            btnForward.Size = new Size(33, 35);
-            btnForward.TabIndex = 3;
-            btnForward.UseVisualStyleBackColor = false;
-            btnForward.Click += btnForward_Click;
-            // 
-            // lblStage
-            // 
-            lblStage.Dock = DockStyle.Fill;
-            lblStage.Location = new Point(42, 3);
-            lblStage.Margin = new Padding(3);
-            lblStage.Name = "lblStage";
-            lblStage.Size = new Size(111, 35);
-            lblStage.TabIndex = 6;
-            lblStage.Text = "label";
-            lblStage.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // btnBack
-            // 
-            btnBack.BackColor = Color.White;
-            btnBack.Cursor = Cursors.Hand;
-            btnBack.Dock = DockStyle.Fill;
-            btnBack.Enabled = false;
-            btnBack.Image = (Image)resources.GetObject("btnBack.Image");
-            btnBack.Location = new Point(3, 3);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(33, 35);
-            btnBack.TabIndex = 2;
-            btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += btnBack_Click;
             // 
             // panelOuterView
             // 
@@ -375,8 +397,8 @@
             panelSettingsHolder.ResumeLayout(false);
             tlpSettings.ResumeLayout(false);
             tlpSettings.PerformLayout();
-            tlpInfo.ResumeLayout(false);
             tlpNavigation.ResumeLayout(false);
+            tlpInfo.ResumeLayout(false);
             panelOuterView.ResumeLayout(false);
             panelOuterMain.ResumeLayout(false);
             ResumeLayout(false);
@@ -406,5 +428,6 @@
         private Label lblPlacesMaxCount;
         private Label lblOutput;
         private TableLayoutPanel tlpOutput;
+        private Button btnUpdateTokenSequence;
     }
 }

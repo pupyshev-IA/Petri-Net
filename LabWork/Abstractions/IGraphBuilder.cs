@@ -9,6 +9,8 @@ namespace LabWork.Abstractions
 
         void VisualizePetriGraph(GraphInfo graphInfo, ScrollableControl layout, Graphics graphics);
 
-        void UpdateTokensPositionForPlace(List<Place> places);
+        void UpdateTokensPositionForPlaces(List<Place> places);
+
+        void UpdateTokenSequence(GraphInfo graphInfo, List<int> tokenSequence);
     }
 }

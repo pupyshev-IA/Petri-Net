@@ -92,6 +92,38 @@ namespace LabWork.Service
             transitionBrush.Dispose();
         }
 
+        public void UpdateTokenSequence(GraphInfo graphInfo, List<int> tokenSequence)
+        {
+            int tokenId = 1;
+            var tokensInfo = new Dictionary<int, Token>();
+
+            foreach (var place in graphInfo.PlacesInfo.Values)
+            {
+                var tokenCount = tokenSequence[place.Id - 1];
+                var tokens = CreateTokensForPlace(place, tokenCount, ref tokenId);
+
+                foreach (var token in tokens)
+                    tokensInfo.Add(token.Id, token);
+
+                place.Tokens = tokens;
+                graphInfo.TokensInfo = tokensInfo;
+            }
+        }
+
+        public void UpdateTokensPositionForPlaces(List<Place> places)
+        {
+            foreach (var place in places)
+            {
+                var tokens = place.Tokens.ToList();
+
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    var coordinates = GetTokenPosition(place, place.Tokens.Count, i);
+                    tokens[i].Сoordinates = coordinates;
+                }
+            }
+        }
+
         private void DrawCells(ScrollableControl layout, Graphics graphics)
         {
             Pen pen = new Pen(AppConstants.CellColor, AppConstants.CellThickness);
@@ -199,20 +231,6 @@ namespace LabWork.Service
             }
 
             return tokens;
-        }
-
-        public void UpdateTokensPositionForPlace(List<Place> places)
-        {
-            foreach (var place in places)
-            {
-                var tokens = place.Tokens.ToList();
-
-                for (int i = 0; i < tokens.Count; i++)
-                {
-                    var coordinates = GetTokenPosition(place, place.Tokens.Count, i);
-                    tokens[i].Сoordinates = coordinates;
-                }
-            }
         }
 
         private Point GetTokenPosition(Place place, int tokenCount, int tokenNum)

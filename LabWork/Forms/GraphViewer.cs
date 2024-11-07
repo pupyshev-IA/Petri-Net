@@ -62,6 +62,13 @@ namespace LabWork
             panelView.Invalidate();
         }
 
+        private void btnUpdateTokenSequence_Click(object sender, EventArgs e)
+        {
+            _action = UpdatedTokenSequence;
+
+            panelView.Invalidate();
+        }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             _currentStage--;
@@ -93,7 +100,24 @@ namespace LabWork
             _currentTokenSequence = InitializeTokenSequence();
             var graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
             _stages = PetriNetEngine.Simulate(graphInfo, _graphBuilder);
-            
+
+            ShowCurrentStage(graphics);
+        }
+
+        private void UpdatedTokenSequence(Graphics graphics)
+        {
+            if (!ValidateInputData())
+            {
+                MessageBox.Show("¬ведены некорректные данные", "ќшибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            _currentStage = 0;
+            _currentTokenSequence = InitializeTokenSequence();
+            var graphInfo = _stages[_currentStage];
+            _graphBuilder.UpdateTokenSequence(graphInfo, _currentTokenSequence.ToList());
+            _stages = PetriNetEngine.Simulate(graphInfo, _graphBuilder);
+
             ShowCurrentStage(graphics);
         }
 
@@ -120,6 +144,7 @@ namespace LabWork
         {
             btnBack.Enabled = _currentStage > 0;
             btnForward.Enabled = _currentStage < AppConstants.NumberOfFirings;
+            btnUpdateTokenSequence.Enabled = panelView.Visible;
         }
 
         private bool ValidateInputData()
@@ -137,6 +162,6 @@ namespace LabWork
         private ICollection<int> InitializeTokenSequence() =>
             mTextBoxInputData.Text.Split(InputSeparator)
             .Select(int.Parse)
-            .ToList();            
+            .ToList();
     }
 }
