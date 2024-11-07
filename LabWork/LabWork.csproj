@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="result\" />
     <Folder Include="res\" />
   </ItemGroup>
 

@@ -56,7 +56,7 @@ namespace LabWork.Service
         private static List<Transition> GetActiveTransitions(List<Transition> transitions) =>
             transitions.Where(transition => transition.IncomingPlaces.All(place => place.Tokens.Any())).ToList();
 
-        public static GraphInfo DeepCopyGraphInfo(GraphInfo original)
+        private static GraphInfo DeepCopyGraphInfo(GraphInfo original)
         {
             var copy = new GraphInfo();
 

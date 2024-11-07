@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GraphViewer));
             panelMain = new Panel();
+            btnDetailedInfo = new Button();
             tlpOutput = new TableLayoutPanel();
             lblOutput = new Label();
             panelOuterSettingsHolder = new Panel();
@@ -65,6 +66,7 @@
             // panelMain
             // 
             panelMain.BackColor = Color.WhiteSmoke;
+            panelMain.Controls.Add(btnDetailedInfo);
             panelMain.Controls.Add(tlpOutput);
             panelMain.Controls.Add(lblOutput);
             panelMain.Controls.Add(panelOuterSettingsHolder);
@@ -76,6 +78,17 @@
             panelMain.Size = new Size(998, 718);
             panelMain.TabIndex = 0;
             panelMain.MouseDown += panelMain_MouseDown;
+            // 
+            // btnDetailedInfo
+            // 
+            btnDetailedInfo.Enabled = false;
+            btnDetailedInfo.Image = Properties.Resources.magnifying_glass;
+            btnDetailedInfo.Location = new Point(410, 608);
+            btnDetailedInfo.Name = "btnDetailedInfo";
+            btnDetailedInfo.Size = new Size(35, 35);
+            btnDetailedInfo.TabIndex = 7;
+            btnDetailedInfo.UseVisualStyleBackColor = true;
+            btnDetailedInfo.Click += btnDetailedInfo_Click;
             // 
             // tlpOutput
             // 
@@ -429,5 +442,6 @@
         private Label lblOutput;
         private TableLayoutPanel tlpOutput;
         private Button btnUpdateTokenSequence;
+        private Button btnDetailedInfo;
     }
 }

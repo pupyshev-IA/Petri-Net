@@ -1,5 +1,6 @@
 using LabWork.Abstractions;
 using LabWork.Domain;
+using LabWork.Forms;
 using LabWork.Service;
 
 namespace LabWork
@@ -69,6 +70,17 @@ namespace LabWork
             panelView.Invalidate();
         }
 
+        private void btnDetailedInfo_Click(object sender, EventArgs e)
+        {
+            var logs = PetriNetStateLogger.GetDetailedLogs(_stages);
+
+            //Console.WriteLine(logs);
+            PetriNetStateLogger.WriteToTextFile(logs);
+
+            DetailedInfo info = new DetailedInfo(logs);
+            info.Show();
+        }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             _currentStage--;
@@ -126,6 +138,7 @@ namespace LabWork
             _graphBuilder.VisualizePetriGraph(_stages[_currentStage], panelView, graphics);
 
             SetValueForStageLabel();
+            ShowCurrentStageLogs();
             UpdateButtonsStatus();
         }
 
@@ -140,11 +153,34 @@ namespace LabWork
             lblTokensMaxCount.Text = lblTokensMaxCount.Text + WhiteSpace + AppConstants.TokensMaxCountPerPlace;
         }
 
+        private void ShowCurrentStageLogs()
+        {
+            tlpOutput.Controls.Clear();
+            var logs = PetriNetStateLogger.GetCurrentStageLogs(_stages, _currentStage);
+
+            foreach (var log in logs)
+            {
+                Label label = new Label()
+                {
+                    Text = log,
+                    Font = new Font("Segoe UI", 12, FontStyle.Regular),
+                    ForeColor = Color.Black,
+                    BackColor = Color.WhiteSmoke,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    AutoSize = true,
+                    Dock = DockStyle.Fill
+                };
+
+                tlpOutput.Controls.Add(label);
+            }
+        }
+
         private void UpdateButtonsStatus()
         {
             btnBack.Enabled = _currentStage > 0;
             btnForward.Enabled = _currentStage < AppConstants.NumberOfFirings;
             btnUpdateTokenSequence.Enabled = panelView.Visible;
+            btnDetailedInfo.Enabled = panelView.Visible;
         }
 
         private bool ValidateInputData()
