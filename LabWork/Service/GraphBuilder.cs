@@ -201,6 +201,20 @@ namespace LabWork.Service
             return tokens;
         }
 
+        public void UpdateTokensPositionForPlace(List<Place> places)
+        {
+            foreach (var place in places)
+            {
+                var tokens = place.Tokens.ToList();
+
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    var coordinates = GetTokenPosition(place, place.Tokens.Count, i);
+                    tokens[i].Сoordinates = coordinates;
+                }
+            }
+        }
+
         private Point GetTokenPosition(Place place, int tokenCount, int tokenNum)
         {
             int parentCenterX = place.Сoordinates.X + place.Metrics.Width / 2;

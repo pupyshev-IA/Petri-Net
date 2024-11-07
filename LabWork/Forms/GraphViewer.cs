@@ -11,11 +11,10 @@ namespace LabWork
 
         private Action<Graphics> _action;
         private string _currentStageText = "Этап: {0}";
-        private int _currentStage = 1;
+        private int _currentStage = 0;
 
         private IGraphBuilder _graphBuilder;
         private ICollection<int>? _currentTokenSequence;
-        private GraphInfo? _graphInfo;
         private List<GraphInfo> _stages;
 
         public GraphViewer(IGraphBuilder graphBuilder)
@@ -90,22 +89,20 @@ namespace LabWork
                 return;
             }
 
-            _currentStage = 1;
+            _currentStage = 0;
             _currentTokenSequence = InitializeTokenSequence();
-            _graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
-            //_stages = new PetriNetEngine(_graphInfo).Simulate();
-
+            var graphInfo = _graphBuilder.BuildPetriGraph(panelView, _currentTokenSequence.ToList());
+            _stages = PetriNetEngine.Simulate(graphInfo, _graphBuilder);
+            
             ShowCurrentStage(graphics);
         }
 
         private void ShowCurrentStage(Graphics graphics)
         {
-            //_graphInfo = _stages[_currentStage - 1];
+            _graphBuilder.VisualizePetriGraph(_stages[_currentStage], panelView, graphics);
 
             SetValueForStageLabel();
             UpdateButtonsStatus();
-
-            _graphBuilder.VisualizePetriGraph(_graphInfo, panelView, graphics);
         }
 
         private void SetValueForStageLabel() =>
@@ -121,7 +118,7 @@ namespace LabWork
 
         private void UpdateButtonsStatus()
         {
-            btnBack.Enabled = _currentStage > 1;
+            btnBack.Enabled = _currentStage > 0;
             btnForward.Enabled = _currentStage < AppConstants.NumberOfFirings;
         }
 
