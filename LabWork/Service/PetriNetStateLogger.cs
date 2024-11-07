@@ -56,7 +56,14 @@ namespace LabWork.Service
                     previousTokenSequence.Add(place.Tokens.Count);
 
                 var movement = TrackTokenMovement(currentTokenSequence, previousTokenSequence);
-                builder.AppendLine($"[Место {movement.placeIdFrom}] --> [Место {movement.placeIdTo}]");
+                var transitionId = movement.placeIdFrom != 0 && movement.placeIdTo != 0 
+                    ? GetTriggeredTransition(movement.placeIdFrom, movement.placeIdTo, stages.First()) 
+                    : 0;
+
+                if (movement.placeIdFrom == 0 || movement.placeIdTo == 0 || transitionId == 0)
+                    builder.AppendLine("-ТУПИК-");
+
+                builder.AppendLine($"[Место {movement.placeIdFrom}] --> |Переход {transitionId}| --> [Место {movement.placeIdTo}]");
                 builder.AppendLine();
             }
 
@@ -82,6 +89,15 @@ namespace LabWork.Service
             }
 
             return (placeIdFrom + 1, placeIdTo + 1);
+        }
+
+        private static int GetTriggeredTransition(int placeIdFrom, int placeIdTo, GraphInfo graphInfo)
+        {
+            var transition = graphInfo.TransitionsInfo.Values
+                .Where(tr => tr.IncomingPlaces.Any(place => place.Id == placeIdFrom) && tr.OutgoingPlaces.Any(place => place.Id == placeIdTo))
+                .First();
+
+            return transition.Id;
         }
 
         public static void WriteToTextFile(string text)
