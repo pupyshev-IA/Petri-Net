@@ -15,7 +15,7 @@ namespace LabWork.Service
             PetriNetStateLogger.AddInfo($"[-----ЭТАП {0}-----]");
             PetriNetStateLogger.AddInfo(">>Текущее положение меток<<");
             foreach (var place in stages[0].PlacesInfo.Values)
-                PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Кол-во Меток: {place.Tokens.Count}");
+                PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Меток: {place.Tokens.Count}");
 
             foreach (var index in Enumerable.Range(1, AppConstants.NumberOfFirings))
             {
@@ -46,7 +46,7 @@ namespace LabWork.Service
                 PetriNetStateLogger.AddInfo("");
                 PetriNetStateLogger.AddInfo(">>Текущее положение меток<<");
                 foreach (var place in stages[index].PlacesInfo.Values)
-                    PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Кол-во Меток: {place.Tokens.Count}");
+                    PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Меток: {place.Tokens.Count}");
             }
 
             return stages;
