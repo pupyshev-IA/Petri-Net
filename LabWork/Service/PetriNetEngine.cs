@@ -11,13 +11,26 @@ namespace LabWork.Service
             var random = new Random();
             var stages = new List<GraphInfo>() { graphInfo };
 
-            foreach (var _ in Enumerable.Range(1, AppConstants.NumberOfFirings))
+            PetriNetStateLogger.InitializeNewBuilder();
+            PetriNetStateLogger.AddInfo($"[-----ЭТАП {0}-----]");
+            PetriNetStateLogger.AddInfo(">>Текущее положение меток<<");
+            foreach (var place in stages[0].PlacesInfo.Values)
+                PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Кол-во Меток: {place.Tokens.Count}");
+
+            foreach (var index in Enumerable.Range(1, AppConstants.NumberOfFirings))
             {
                 var currentStage = DeepCopyGraphInfo(stages.Last());
-                var activeTransitions = GetActiveTransitions(currentStage.TransitionsInfo.Values.ToList());
+
+                PetriNetStateLogger.AddInfo("");
+                PetriNetStateLogger.AddInfo($"[-----ЭТАП {index}-----]");
+                PetriNetStateLogger.AddInfo(">>Перемещение меток<<");
+
+                var activeTransitions = GetActiveTransitions(currentStage.TransitionsInfo.Values.ToList(), random);
 
                 if (!activeTransitions.Any())
                 {
+                    PetriNetStateLogger.AddInfo("-ТУПИК-");
+
                     int count = stages.Count;
                     for (int i = 0; i <= AppConstants.NumberOfFirings - count; i++)
                         stages.Add(currentStage);
@@ -25,36 +38,87 @@ namespace LabWork.Service
                     break;
                 }
 
-                var randomTransition = activeTransitions[random.Next(activeTransitions.Count)];
-                Fire(randomTransition, random, graphBuilder);
+                foreach (var transition in activeTransitions)
+                    Fire(transition, random, currentStage, graphBuilder);
 
                 stages.Add(currentStage);
+
+                PetriNetStateLogger.AddInfo("");
+                PetriNetStateLogger.AddInfo(">>Текущее положение меток<<");
+                foreach (var place in stages[index].PlacesInfo.Values)
+                    PetriNetStateLogger.AddInfo($"\tМесто {place.Id}  >  Кол-во Меток: {place.Tokens.Count}");
             }
 
             return stages;
         }
 
-        private static void Fire(Transition transition, Random random, IGraphBuilder graphBuilder)
+        private static void Fire(Transition transition, Random random, GraphInfo currentStage, IGraphBuilder graphBuilder)
         {
-            var incomingPlaces = transition.IncomingPlaces.ToList();
-            var outgoingPlaces = transition.OutgoingPlaces.ToList();
+            var placesForUpdate = new List<Place>();
 
-            var placeTo = outgoingPlaces[random.Next(outgoingPlaces.Count)];
-            var placeFrom = incomingPlaces[random.Next(incomingPlaces.Count)];
+            var placeFrom = transition.IncomingPlaces
+                .Where(place => place.Tokens.Count > 0)
+                .OrderBy(_ => random.Next())
+                .First();
 
-            var randomToken = placeFrom.Tokens.ElementAt(random.Next(placeFrom.Tokens.Count - 1));
+            placesForUpdate.Add(placeFrom);
+            var token = placeFrom.Tokens.First();
+            placeFrom.Tokens.Remove(token);
 
-            placeTo.Tokens.Add(randomToken);
-            placeFrom.Tokens.Remove(randomToken);
+            PetriNetStateLogger.AddInfo($"ПЕРЕХОД {transition.Id}");
+            PetriNetStateLogger.AddInfo($"-----------------------");
+            for (int i = 0; i < transition.OutgoingPlaces.Count; i++)
+            {
+                var placeTo = transition.OutgoingPlaces.ElementAt(i);
 
-            transition.IncomingPlaces = incomingPlaces;
-            transition.OutgoingPlaces = outgoingPlaces;
+                PetriNetStateLogger.AddInfo($"[Место {placeFrom.Id}] --> (токен) --> [Место {placeTo.Id}]");
 
-            graphBuilder.UpdateTokensPositionForPlaces(new List<Place> { placeFrom, placeTo });
+                if (i == 0)
+                {
+                    placeTo.Tokens.Add(token);
+                }
+                else
+                {
+                    var tokenCopy = DeepCopyToken(token, currentStage.TokensInfo.Keys.Max() + 1);
+                    currentStage.TokensInfo.Add(tokenCopy.Id, tokenCopy);
+                    placeTo.Tokens.Add(tokenCopy);
+                }
+
+                placesForUpdate.Add(placeTo);
+            }
+
+            graphBuilder.UpdateTokensPositionForPlaces(placesForUpdate);
         }
 
-        private static List<Transition> GetActiveTransitions(List<Transition> transitions) =>
-            transitions.Where(transition => transition.IncomingPlaces.All(place => place.Tokens.Any())).ToList();
+        private static List<Transition> GetActiveTransitions(List<Transition> transitions, Random random)
+        {
+            var availableTokens = new Dictionary<int, int>();
+
+            foreach (var transition in transitions)
+            {
+                foreach (var place in transition.IncomingPlaces)
+                {
+                    if (!availableTokens.ContainsKey(place.Id))
+                        availableTokens[place.Id] = place.Tokens.Count;
+                }
+            }
+
+            var activeTransitions = new List<Transition>();
+            var shuffledTransitions = transitions.OrderBy(_ => random.Next()).ToList();
+
+            foreach (var transition in shuffledTransitions)
+            {
+                if (transition.IncomingPlaces.All(place => availableTokens[place.Id] > 0))
+                {
+                    activeTransitions.Add(transition);
+
+                    foreach (var place in transition.IncomingPlaces)
+                        availableTokens[place.Id]--;
+                }
+            }
+
+            return activeTransitions;
+        }
 
         private static GraphInfo DeepCopyGraphInfo(GraphInfo original)
         {
@@ -120,11 +184,23 @@ namespace LabWork.Service
             {
                 Id = original.Id,
                 Сoordinates = original.Сoordinates,
-                Metrics = original.Metrics
+                Metrics = original.Metrics,
+                Color = original.Color
             };
 
             tokenCache[original.Id] = newToken;
             return newToken;
+        }
+
+        private static Token DeepCopyToken(Token original, int id)
+        {
+            return new Token
+            {
+                Id = id,
+                Сoordinates = original.Сoordinates,
+                Metrics = original.Metrics,
+                Color = original.Color
+            };
         }
     }
 }

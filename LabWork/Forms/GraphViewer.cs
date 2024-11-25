@@ -72,9 +72,9 @@ namespace LabWork
 
         private void btnDetailedInfo_Click(object sender, EventArgs e)
         {
-            var logs = PetriNetStateLogger.GetDetailedLogs(_stages);
-
+            var logs = PetriNetStateLogger.GetDetailedLogs();
             //Console.WriteLine(logs);
+
             PetriNetStateLogger.WriteToTextFile(logs);
 
             DetailedInfo info = new DetailedInfo(logs);

@@ -5,6 +5,8 @@ namespace LabWork.Service
 {
     public static class PetriNetStateLogger
     {
+        private static StringBuilder _builder;
+
         public static ICollection<string> GetCurrentStageLogs(List<GraphInfo> stages, int currentStageNum)
         {
             var stageLogs = new List<string>();
@@ -27,78 +29,14 @@ namespace LabWork.Service
             return stageLogs;
         }
 
-        public static string GetDetailedLogs(List<GraphInfo> stages)
-        {
-            var builder = new StringBuilder();
+        public static void InitializeNewBuilder() => 
+            _builder = new StringBuilder();
 
-            foreach (var index in Enumerable.Range(0, stages.Count))
-            {
-                builder.AppendLine($"[-----ЭТАП {index}-----]");
-                builder.AppendLine();
-                builder.AppendLine(">>Текущее положение меток<<");
+        public static void AddInfo(string text) => 
+            _builder.AppendLine(text);
 
-                var currentTokenSequence = new List<int>();
-                foreach (var place in stages[index].PlacesInfo.Values)
-                {
-                    currentTokenSequence.Add(place.Tokens.Count);
-                    builder.AppendLine($"\tМесто {place.Id}  >  Кол-во Меток: {place.Tokens.Count}");
-                }
-
-                builder.AppendLine();
-
-                if (index == 0)
-                    continue;
-
-                builder.AppendLine(">>Перемещение меток<<");
-
-                var previousTokenSequence = new List<int>();
-                foreach (var place in stages[index - 1].PlacesInfo.Values)
-                    previousTokenSequence.Add(place.Tokens.Count);
-
-                var movement = TrackTokenMovement(currentTokenSequence, previousTokenSequence);
-                var transitionId = movement.placeIdFrom != 0 && movement.placeIdTo != 0 
-                    ? GetTriggeredTransition(movement.placeIdFrom, movement.placeIdTo, stages.First()) 
-                    : 0;
-
-                if (movement.placeIdFrom == 0 || movement.placeIdTo == 0 || transitionId == 0)
-                    builder.AppendLine("-ТУПИК-");
-
-                builder.AppendLine($"[Место {movement.placeIdFrom}] --> |Переход {transitionId}| --> [Место {movement.placeIdTo}]");
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
-        }
-
-        private static (int placeIdFrom, int placeIdTo) TrackTokenMovement(List<int> current, List<int> previous)
-        {
-            int placeIdFrom = -1;
-            int placeIdTo = -1;
-
-            for (int i = 0; i < current.Count; i++)
-            {
-                int difference = current[i] - previous[i];
-
-                if (difference == -1)
-                    placeIdFrom = i;
-                else if (difference == 1)
-                    placeIdTo = i;
-
-                if (placeIdFrom != -1 && placeIdTo != -1)
-                    break;
-            }
-
-            return (placeIdFrom + 1, placeIdTo + 1);
-        }
-
-        private static int GetTriggeredTransition(int placeIdFrom, int placeIdTo, GraphInfo graphInfo)
-        {
-            var transition = graphInfo.TransitionsInfo.Values
-                .Where(tr => tr.IncomingPlaces.Any(place => place.Id == placeIdFrom) && tr.OutgoingPlaces.Any(place => place.Id == placeIdTo))
-                .First();
-
-            return transition.Id;
-        }
+        public static string GetDetailedLogs() => 
+            _builder.ToString();
 
         public static void WriteToTextFile(string text)
         {

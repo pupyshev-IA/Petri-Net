@@ -62,7 +62,6 @@ namespace LabWork.Service
             Font textFont = new Font(AppConstants.TextFontFamily, AppConstants.TextSize);
             SolidBrush textBrush = new SolidBrush(AppConstants.TextColor);
             Pen placePen = new Pen(AppConstants.PlaceColor, AppConstants.PlaceThickness);
-            SolidBrush tokenBrush = new SolidBrush(AppConstants.TokenColor);
             SolidBrush transitionBrush = new SolidBrush(AppConstants.TransitionColor);
 
             foreach (var place in graphInfo.PlacesInfo.Values)
@@ -74,7 +73,11 @@ namespace LabWork.Service
             }
 
             foreach (var token in graphInfo.TokensInfo.Values)
+            {
+                SolidBrush tokenBrush = new SolidBrush(token.Color);
                 graphics.FillEllipse(tokenBrush, new Rectangle(token.Сoordinates, token.Metrics));
+                tokenBrush.Dispose();
+            }
 
             foreach (var transition in graphInfo.TransitionsInfo.Values)
             {
@@ -88,7 +91,6 @@ namespace LabWork.Service
 
             textBrush.Dispose();
             placePen.Dispose();
-            tokenBrush.Dispose();
             transitionBrush.Dispose();
         }
 
@@ -195,11 +197,17 @@ namespace LabWork.Service
 
         private Token CreateTokenElement(int id, Point coordinates)
         {
+            var random = new Random();
+            int r = random.Next(255);
+            int g = random.Next(255);
+            int b = random.Next(255);
+
             var token = new Token
             {
                 Id = id,
                 Сoordinates = coordinates,
-                Metrics = new Size((int)AppConstants.TokenWidth, (int)AppConstants.TokenHeight)
+                Metrics = new Size((int)AppConstants.TokenWidth, (int)AppConstants.TokenHeight),
+                Color = Color.FromArgb(r, g, b)
             };
 
             return token;
